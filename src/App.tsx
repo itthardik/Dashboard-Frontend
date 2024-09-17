@@ -4,7 +4,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import "react-toastify/dist/ReactToastify.css";
 import { Layout } from "./components/Layout";
-import ErrorPage from "./components/ErrorPage";
+import ErrorPage from "./pages/ErrorPage";
 import { ConfigProvider } from "./api/ContextApi";
 import Sales from "./pages/Sales";
 import Inventory from "./pages/Inventory";

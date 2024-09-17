@@ -1,6 +1,6 @@
 const Home = () => {
 	return (
-		<div className="z-0 flex flex-col justify-center items-center text-center ">
+		<div className="z-0 flex flex-col justify-center items-center text-center h-lvh">
 			<div className="py-5 px-20">
 				<h1 className="text-4xl font-bold mb-4 text-ternary">
 					Welcome to E-Commerce Sales Dashboard

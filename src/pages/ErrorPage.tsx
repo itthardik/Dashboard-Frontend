@@ -6,8 +6,7 @@ export default function ErrorPage({ error }: { error?: any }) {
 	return (
 		<div
 			className={
-				"flex flex-col justify-evenly items-center w-full bg-[#FCFCFC] " +
-				(error ? "h-full" : "h-lvh")
+				"flex flex-col justify-evenly items-center w-full bg-[#FCFCFC] h-lvh"
 			}
 		>
 			<img

@@ -2,14 +2,16 @@ import { useState } from "react";
 import {
 	IoMdHelpCircleOutline,
 	IoMdCloseCircleOutline,
-	IoIosArrowDown,
+	IoMdLogOut,
 } from "react-icons/io";
 
 import {
+	FcBusinessman,
 	FcComboChart,
 	FcConferenceCall,
 	FcCurrencyExchange,
 	FcCustomerSupport,
+	FcManager,
 	FcSettings,
 	FcShipped,
 } from "react-icons/fc";
@@ -17,15 +19,22 @@ import {
 import { GiHamburgerMenu } from "react-icons/gi";
 
 import { Link, useNavigate } from "react-router-dom";
-import { RiLoginBoxFill, RiLogoutBoxFill } from "react-icons/ri";
+import { RiLoginBoxFill } from "react-icons/ri";
 import { useConfig } from "./../api/ContextApi";
 import NavbarLink from "./NavbarLink";
 import { handleLogout } from "../api/authContoller";
 
-const NavBar = () => {
+const NavBar = ({
+	setLoading,
+	setError,
+}: {
+	setLoading: React.Dispatch<boolean>;
+	setError: React.Dispatch<any>;
+}) => {
 	const [menu, setMenu] = useState(false);
 	const { userData, setUserData } = useConfig();
-	const [logoutAnimation, setLogoutAnimation] = useState(false);
+	const role: string = userData?.Role ?? "none";
+	// const [logoutAnimation, setLogoutAnimation] = useState(false);
 	const navigate = useNavigate();
 
 	return (
@@ -33,11 +42,11 @@ const NavBar = () => {
 			{/* desktop nav */}
 			<div
 				className={
-					"sm:w-1/6 w-5/6 sm:static absolute top-0 left-0 sm:flex z-40 bg-secondary min-h-full " +
+					"sm:w-1/6 w-5/6 sm:static absolute top-0 left-0 sm:flex z-40 bg-secondary min-h-full shadow " +
 					(menu ? "hidden" : "block")
 				}
 			>
-				<div className=" py-5 flex flex-col justify-between items-center min-h-lvh">
+				<div className=" py-5 flex flex-col justify-between items-center h-lvh">
 					{/* LOGO */}
 					<Link
 						className="flex justify-center items-center gap-4 w-full text-black cursor-pointer"
@@ -60,20 +69,49 @@ const NavBar = () => {
 								Login
 							</Link>
 						) : (
-							<div className=" flex flex-col justify-center items-center w-full gap-3 mb-1">
-								<div className="flex justify-center gap-2 items-center w-full">
-									<img
+							<div className=" flex flex-col justify-center items-center w-full gap-3 mb-10">
+								<div className="flex justify-center gap-3 items-center w-full">
+									{/* <img
 										src="/images/circleUserImg.png"
 										alt="user Gif"
 										className="max-h-16 p-[9px]"
-									/>
+									/> */}
+									{["admin"].includes(role) ? (
+										<FcBusinessman className="text-5xl" />
+									) : (
+										<FcManager className="text-5xl" />
+									)}
 									<div className="flex flex-col">
 										<div className="text-xl font-medium">
 											{userData.Username}
 										</div>
 										<div className="font-normal text-sm">{userData.Role}</div>
 									</div>
-									<IoIosArrowDown
+									{/* <FaPowerOff
+										className="text-2xl cursor-pointer text-ternary"
+										title="Logout"
+										onClick={() => {
+											handleLogout({
+												setUserData,
+												navigate,
+												setLoading,
+												setError,
+											});
+										}}
+									/> */}
+									<IoMdLogOut
+										className="text-4xl cursor-pointer text-ternary"
+										title="Logout"
+										onClick={() => {
+											handleLogout({
+												setUserData,
+												navigate,
+												setLoading,
+												setError,
+											});
+										}}
+									/>
+									{/* <IoIosArrowDown
 										className="text-2xl cursor-pointer"
 										style={{
 											transitionDuration: "0.3s",
@@ -85,17 +123,23 @@ const NavBar = () => {
 											e.stopPropagation();
 											setLogoutAnimation(!logoutAnimation);
 										}}
-									/>
+									/> */}
 								</div>
 
-								<div
+								{/* <div
 									onClick={() => {
-										logoutAnimation && handleLogout({ setUserData, navigate });
+										logoutAnimation &&
+											handleLogout({
+												setUserData,
+												navigate,
+												setLoading,
+												setError,
+											});
 									}}
 									className="z-0 flex justify-center items-center text-md gap-1 "
 									style={{
 										cursor: logoutAnimation ? "pointer" : "default",
-										translate: logoutAnimation ? "0px -10px" : "0px -30px",
+										translate: logoutAnimation ? "0px -5px" : "0px -30px",
 										opacity: !logoutAnimation ? "0" : "100",
 										transition: "linear",
 										transitionDuration: "0.2s",
@@ -103,36 +147,46 @@ const NavBar = () => {
 								>
 									<RiLogoutBoxFill className="text-xl" />
 									Logout
-								</div>
+								</div> */}
 							</div>
 						)}
 						{/* Nav Items */}
 						<div className="w-full">
-							<NavbarLink
-								navLink="/sales"
-								navText="Sales"
-								Icon={FcComboChart}
-							/>
-							<NavbarLink
-								navLink="/inventory"
-								navText="Inventory"
-								Icon={FcShipped}
-							/>
-							<NavbarLink
-								navLink="/revenue"
-								navText="Revenue"
-								Icon={FcCurrencyExchange}
-							/>
-							<NavbarLink
-								navLink="/users"
-								navText="Users"
-								Icon={FcConferenceCall}
-							/>
-							<NavbarLink
-								navLink="/customerSupport"
-								navText="Support"
-								Icon={FcCustomerSupport}
-							/>
+							{["admin", "sales"].includes(role) && (
+								<NavbarLink
+									navLink="/sales"
+									navText="Sales"
+									Icon={FcComboChart}
+								/>
+							)}
+							{["admin", "inventory"].includes(role) && (
+								<NavbarLink
+									navLink="/inventory"
+									navText="Inventory"
+									Icon={FcShipped}
+								/>
+							)}
+							{["admin", "revenue"].includes(role) && (
+								<NavbarLink
+									navLink="/revenue"
+									navText="Revenue"
+									Icon={FcCurrencyExchange}
+								/>
+							)}
+							{["admin"].includes(role) && (
+								<NavbarLink
+									navLink="/users"
+									navText="Users"
+									Icon={FcConferenceCall}
+								/>
+							)}
+							{["admin", "support"].includes(role) && (
+								<NavbarLink
+									navLink="/customerSupport"
+									navText="Support"
+									Icon={FcCustomerSupport}
+								/>
+							)}
 						</div>
 					</div>
 
@@ -146,16 +200,17 @@ const NavBar = () => {
 							<IoMdHelpCircleOutline className="text-lg" />
 							Help
 						</Link>
-						<Link
-							className="flex justify-center items-center gap-1 text-decoration-none text-black"
-							style={{ cursor: "pointer" }}
-							to="/settings"
-						>
-							<FcSettings className="text-lg" />
-							Settings
-						</Link>
 
-						{/* {userRole === "Admin" && <Setting />} */}
+						{["admin"].includes(role) && (
+							<Link
+								className="flex justify-center items-center gap-1 text-decoration-none text-black"
+								style={{ cursor: "pointer" }}
+								to="/settings"
+							>
+								<FcSettings className="text-lg" />
+								Settings
+							</Link>
+						)}
 
 						<IoMdCloseCircleOutline
 							className={"mt-1 w-full sm:hidden " + (menu ? "hidden" : "block")}

@@ -1,14 +1,42 @@
 import { Outlet } from "react-router";
 import NavBar from "./NavBar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useConfig } from "./../api/ContextApi";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 import { toast } from "react-toastify";
 import mqtt, { IClientOptions } from "mqtt";
+import Loading from "./Loading";
+import ErrorPage from "../pages/ErrorPage";
+import { refreshToken } from "../api/authContoller";
 
 export const Layout = () => {
+	const [loading, setLoading] = useState<boolean>(true);
+	const [error, setError] = useState<boolean>();
+
 	const { setUserData, setMqttClient, connection, setConnection, userData } =
 		useConfig();
+
+	useEffect(() => {
+		const checkTokenExpiration = () => {
+			if (userData === null) return;
+
+			const tokenExpirationTime = new Date(
+				userData.TokenExpirationTime
+			).getTime();
+			const dateNow = new Date().getTime();
+			if (
+				dateNow > tokenExpirationTime - 60 * 1000 &&
+				dateNow < tokenExpirationTime
+			) {
+				refreshToken({ setUserData, setLoading, setError });
+			}
+		};
+
+		const intervalId = setInterval(checkTokenExpiration, 60 * 1000);
+
+		return () => clearInterval(intervalId);
+	}, [userData, setUserData]);
+
 	// adding new SingnalR connection and mqtt client with basic event (onConnect, onMessage)
 	useEffect(() => {
 		try {
@@ -17,7 +45,7 @@ export const Layout = () => {
 			setUserData(userData);
 			// Setup SignalR connection
 			const newConnection = new HubConnectionBuilder()
-				.withUrl("https://localhost:5043/mqtthub")
+				.withUrl("https://localhost:7012/mqtthub")
 				.withAutomaticReconnect()
 				.build();
 
@@ -33,16 +61,16 @@ export const Layout = () => {
 			const client = mqtt.connect("ws://localhost:9001", options);
 			client.on("connect", () => {
 				setMqttClient(client);
-				toast.success("Connected to MQTT broker");
+				toast.success("Connected to broker");
 			});
 			client.on("close", () => {
 				client.end();
-				toast.success("Disconnected to MQTT broker");
+				toast.error("Disconnected to broker");
 				setMqttClient(null);
 			});
 
 			client.on("message", (topic: any, message: any) => {
-				const payload = { topic, message: message.toString() };
+				// const payload = { topic, message: message.toString() };
 				// setMessages((prevMessages) => [...prevMessages, payload]);
 			});
 			client.on("error", (e: any) => {
@@ -58,33 +86,48 @@ export const Layout = () => {
 		} catch (ex: any) {
 			toast.error(ex.message);
 		}
-	}, []);
+	}, [userData, setUserData]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// starting signalR connection and adding the on receive and on start events
 	// only when new connection is made
 	useEffect(() => {
+		if (userData === null) return;
 		if (connection) {
 			connection
 				.start()
 				.then((result: any) => {
-					console.log("Connected to SignalR hub");
-					connection.on("ReceiveMessage", (topic: any, message: any) => {
-						// setMessages((prevMessages) => [
-						// 	...prevMessages,
-						// 	{ topic, message },
-						// ]);
-					});
+					toast.success("Connected to SignalR hub");
+					// connection.on("ReceiveMessage", (topic: any, message: any) => {
+					// 	// setMessages((prevMessages) => [
+					// 	// 	...prevMessages,
+					// 	// 	{ topic, message },
+					// 	// ]);
+					// });
 				})
-				.catch((e: any) => console.log("Connection failed: ", e));
+				.catch((e: any) => {
+					// toast.error("Connection failed: ", e);
+				});
 		}
-	}, [connection]);
-
-	return (
-		<div className="flex sm:flex-row flex-col bg-white justify-center h-lvh">
-			<NavBar />
-			<div className="h-full sm:w-5/6 w-full flex flex-col justify-center items-center text-center ">
-				<Outlet />
+	}, [connection, userData]);
+	if (!loading)
+		return (
+			<div className="flex flex-col justify-center items-center text-center h-lvh">
+				<Loading />;
 			</div>
-		</div>
-	);
+		);
+	else if (error) {
+		return (
+			<div className="flex flex-col justify-center items-center text-center h-lvh">
+				<ErrorPage error={error} />;
+			</div>
+		);
+	} else
+		return (
+			<div className="flex sm:flex-row flex-col bg-white justify-center h-full">
+				<NavBar setLoading={setLoading} setError={setError} />
+				<div className="h-full sm:w-5/6 w-full flex flex-col justify-center items-center text-center ">
+					<Outlet />
+				</div>
+			</div>
+		);
 };
