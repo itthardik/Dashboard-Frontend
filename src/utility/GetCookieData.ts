@@ -1,6 +1,8 @@
 export const GetCookieData = () => {
 	const cookieString = document.cookie;
-	if (cookieString == "") return null;
+	if (cookieString === "") {
+		return null;
+	}
 	const cookiesArray = cookieString.split("; ");
 	const cookieJson: any = {};
 

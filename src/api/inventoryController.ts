@@ -1,90 +1,27 @@
 import { toast } from "react-toastify";
 import { ProductData } from "../model/ProductType";
-import React from "react";
 
-export const handelProductSearch = async ({
-	searchParams,
-	searchValue,
-	setSearchValue,
-	setProductData,
-	setLoading,
-	setError,
-}: {
-	searchParams: {
-		id: boolean;
-		name: boolean;
-	};
-	searchValue: string;
-	setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-	setProductData: React.Dispatch<React.SetStateAction<ProductData[] | null>>;
-	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-	setError: React.Dispatch<React.SetStateAction<any>>;
-}) => {
-	try {
-		setLoading(false);
-		const response = await fetch(
-			`https://localhost:7012/api/revenue/productCost?${
-				searchParams.id ? "id=" : "name="
-			}${searchValue.trim()}`,
-			{
-				method: "GET",
-				credentials: "include",
-			}
-		);
-		if ([401, 403].includes(response.status)) {
-			setError(response.status.toString());
-			setLoading(true);
-			return;
-		}
-		if (response.status === 404) {
-			toast.error(await response.json());
-			setLoading(true);
-			return;
-		}
-		if (response.status === 400) {
-			var jsonError = await response.json();
-			if (jsonError == null) toast.error(response.toString());
-			for (var err in jsonError.errors) {
-				toast.error(jsonError.errors[err][0]);
-			}
-			setLoading(true);
-			return;
-		}
-		if (response.status === 401)
-			if (!response.ok) {
-				throw new Error((await response.json()).title);
-			}
-		const result = await response.json();
-		if (result.error) {
-			toast.error(result.error);
-		} else {
-			// setSearchValue("");
-			setProductData(result.data);
-		}
-		setLoading(true);
-	} catch (error: any) {
-		setError(error.message);
-		setLoading(true);
-	}
-};
-
-export const fetchSearchValuesByPagination = async ({
-	setLoading,
-	setError,
-	setSearchValueData,
+export const fetchInventoryData = async ({
+	sortFilterKey,
+	pageSize,
 	currPage,
+	setLoading,
+	setError,
 	setMaxPages,
+	setInventoryData,
 }: {
+	currPage: number;
+	sortFilterKey: string;
+	pageSize: number;
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	setError: React.Dispatch<React.SetStateAction<any>>;
-	setSearchValueData: React.Dispatch<React.SetStateAction<any[]>>;
-	currPage: number;
 	setMaxPages: React.Dispatch<React.SetStateAction<number>>;
+	setInventoryData: React.Dispatch<React.SetStateAction<ProductData[] | null>>;
 }) => {
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/revenue/searchValues?pageNumber=${currPage}&pageSize=10`,
+			`https://localhost:7012/api/inventory/getInventory?pageNumber=${currPage}&pageSize=${pageSize}&filterKey=${sortFilterKey}`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -117,7 +54,7 @@ export const fetchSearchValuesByPagination = async ({
 			toast.error(result.error);
 		} else {
 			setMaxPages(result.maxPages);
-			setSearchValueData(result.data);
+			setInventoryData(result.data);
 		}
 		setLoading(true);
 	} catch (error: any) {
@@ -126,22 +63,95 @@ export const fetchSearchValuesByPagination = async ({
 	}
 };
 
-export const fetchRevenueDataByFilterKey = async ({
-	filterKey,
+export const addInventory = async ({
+	productId,
+	stockRequire,
+	inventoryData,
+	setProductId,
+	setRequiredStock,
 	setLoading,
 	setError,
-	setRevenueData,
+	setInventoryData,
+	setAddInventoryModel,
 }: {
-	filterKey: string;
+	productId: number;
+	stockRequire: number;
+	inventoryData: ProductData[];
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	setProductId: React.Dispatch<React.SetStateAction<number>>;
+	setRequiredStock: React.Dispatch<React.SetStateAction<number>>;
 	setError: React.Dispatch<React.SetStateAction<any>>;
-	setRevenueData: React.Dispatch<React.SetStateAction<any[]>>;
+	setAddInventoryModel: React.Dispatch<React.SetStateAction<boolean>>;
+	setInventoryData: React.Dispatch<React.SetStateAction<ProductData[] | null>>;
 }) => {
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/revenue/revenueStats?days=
-			${filterKey.trim()}`,
+			`https://localhost:7012/api/inventory/addInventory?productId=${productId}&stockRequire=${stockRequire}`,
+			{
+				method: "PATCH",
+				credentials: "include",
+			}
+		);
+		if ([401, 403].includes(response.status)) {
+			setError(response.status.toString());
+			setLoading(true);
+			return;
+		}
+		if (response.status === 404) {
+			const result = await response.json();
+			toast.error(result);
+			setLoading(true);
+			return;
+		}
+		if (response.status === 400) {
+			var jsonError = await response.json();
+			if (jsonError == null) toast.error(response.toString());
+			for (var err in jsonError.errors) {
+				toast.error(jsonError.errors[err][0]);
+			}
+			setLoading(true);
+			return;
+		}
+		const result = await response.json();
+		if (!response.ok) {
+			throw new Error(result);
+		} else {
+			var temp: any[] = [];
+			inventoryData.map((i) => {
+				if (i.id === result.data.Id) i.currentStock = result.data.CurrentStock;
+				temp.push(i);
+			});
+			setInventoryData(temp);
+			setAddInventoryModel(false);
+			setProductId(0);
+			setRequiredStock(0);
+			toast.success("Notification Send & Invetory Updated");
+		}
+		setLoading(true);
+	} catch (error: any) {
+		setError(error.message);
+		setLoading(true);
+	}
+};
+
+export const fetchInventoryNotificationData = async ({
+	currPage,
+	setLoading,
+	setError,
+	setMaxPages,
+	setInventoryNotifications,
+}: {
+	currPage: number;
+	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	setError: React.Dispatch<React.SetStateAction<any>>;
+	setMaxPages: React.Dispatch<React.SetStateAction<number>>;
+	setInventoryNotifications: React.Dispatch<React.SetStateAction<any[] | null>>;
+}) => {
+	try {
+		setLoading(false);
+		const response = await fetch(
+			`https://localhost:7012/api/alert/getAlerts?pageNumber=${currPage}&pageSize=5`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -173,7 +183,8 @@ export const fetchRevenueDataByFilterKey = async ({
 		if (result.error) {
 			toast.error(result.error);
 		} else {
-			setRevenueData(result.data);
+			setMaxPages(result.maxPages);
+			setInventoryNotifications(result.data);
 		}
 		setLoading(true);
 	} catch (error: any) {

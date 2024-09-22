@@ -6,27 +6,9 @@ import { handelProductSearch } from "../../api/revenueController";
 import Loading from "../Loading";
 
 const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
-	const [productData, setProductData] = useState<ProductData>({
-		id: 1,
-		name: "Basic T-Shirt",
-		costPrice: 500,
-		sellingPrice: 1500,
-		shippingCost: 200,
-		discount: 100,
-		netProfit: 700,
-		thresholdValue: 10,
-		categoryId: 1,
-		currentStock: 100,
-		supplierId: 1,
-		createdAt: "2024-09-11T16:59:24.893",
-		updatedAt: null,
-		category: null,
-		orderItems: [],
-		supplier: null,
-	});
-
+	const [productData, setProductData] = useState<ProductData[] | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [searchValue, setSearchValue] = useState("");
+	const [searchValue, setSearchValue] = useState("1");
 	const [searchParams, setSearchParams] = useState({
 		id: true,
 		name: false,
@@ -34,9 +16,8 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 	useEffect(() => {
 		handelProductSearch({
 			searchParams,
-			searchValue: "1",
+			searchValue,
 			setSearchValue,
-			setSearchParams,
 			setProductData,
 			setLoading,
 			setError,
@@ -52,30 +33,34 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 	} else
 		return (
 			<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col min-h-[550px]">
-				<div className="flex w-3/5 justify-between items-center">
+				<div className="flex w-full justify-start items-center gap-10">
 					<h1 className="text-2xl font-bold">Cost Analysis</h1>
-					<SearchProduct
-						searchValue={searchValue}
-						setSearchValue={setSearchValue}
-						searchParams={searchParams}
-						setSearchParams={setSearchParams}
-						setProductData={setProductData}
-						setLoading={setLoading}
-						setError={setError}
-					/>
+					<div className="w-1/4">
+						<SearchProduct
+							bgColor="bg-white"
+							searchValue={searchValue}
+							setSearchValue={setSearchValue}
+							searchParams={searchParams}
+							setSearchParams={setSearchParams}
+							setProductData={setProductData}
+							setLoading={setLoading}
+							setError={setError}
+							setClearSearch={null}
+						/>
+					</div>
 				</div>
 				<div className="flex justify-evenly px-10">
 					<div className=" w-[45%] px-4 flex flex-col justify-center items-center">
-						<CostPieChart data={productData} />
+						<CostPieChart data={productData?.[0]} />
 						<div className="font-semibold text-xl">Cost Breakdown Chart</div>
 					</div>
 					<div className="w-[55%] px-10 mt-10">
 						<div>
 							<div className="flex justify-between text-xl">
 								<p>
-									<strong>Product ID:</strong> {productData?.id}
+									<strong>Product ID:</strong> {productData?.[0]?.id}
 								</p>
-								<h2>{productData?.name}</h2>
+								<h2>{productData?.[0]?.name}</h2>
 							</div>
 							<div className="mt-6">
 								<table className="min-w-full bg-white border border-gray-200">
@@ -88,36 +73,44 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 									<tbody>
 										<tr className="border-b border-gray-200">
 											<td className="py-2 px-4">Cost Price</td>
-											<td className="py-2 px-4">₹{productData?.costPrice}</td>
+											<td className="py-2 px-4">
+												₹{productData?.[0]?.costPrice}
+											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
 											<td className="py-2 px-4">Selling Price</td>
 											<td className="py-2 px-4">
-												₹{productData?.sellingPrice}
+												₹{productData?.[0]?.sellingPrice}
 											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
 											<td className="py-2 px-4">Shipping Cost</td>
 											<td className="py-2 px-4">
-												₹{productData?.shippingCost}
+												₹{productData?.[0]?.shippingCost}
 											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
 											<td className="py-2 px-4">Discount</td>
-											<td className="py-2 px-4">₹{productData?.discount}</td>
+											<td className="py-2 px-4">
+												₹{productData?.[0]?.discount}
+											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
 											<td className="py-2 px-4">Net Profit</td>
-											<td className="py-2 px-4">₹{productData?.netProfit}</td>
+											<td className="py-2 px-4">
+												₹{productData?.[0]?.netProfit}
+											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
 											<td className="py-2 px-4">Current Stock</td>
-											<td className="py-2 px-4">{productData?.currentStock}</td>
+											<td className="py-2 px-4">
+												{productData?.[0]?.currentStock}
+											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
-											<td className="py-2 px-4">Threshold Value</td>
+											<td className="py-2 px-4">Average Daily Usage</td>
 											<td className="py-2 px-4">
-												{productData?.thresholdValue}
+												{productData?.[0]?.averageDailyUsage}
 											</td>
 										</tr>
 									</tbody>

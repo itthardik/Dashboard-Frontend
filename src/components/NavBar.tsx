@@ -1,9 +1,5 @@
 import { useState } from "react";
-import {
-	IoMdHelpCircleOutline,
-	IoMdCloseCircleOutline,
-	IoMdLogOut,
-} from "react-icons/io";
+import { IoMdHelpCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 
 import {
 	FcBusinessman,
@@ -23,6 +19,7 @@ import { RiLoginBoxFill } from "react-icons/ri";
 import { useConfig } from "./../api/ContextApi";
 import NavbarLink from "./NavbarLink";
 import { handleLogout } from "../api/authContoller";
+import { FaPowerOff } from "react-icons/fa";
 
 const NavBar = ({
 	setLoading,
@@ -34,7 +31,6 @@ const NavBar = ({
 	const [menu, setMenu] = useState(false);
 	const { userData, setUserData } = useConfig();
 	const role: string = userData?.Role ?? "none";
-	// const [logoutAnimation, setLogoutAnimation] = useState(false);
 	const navigate = useNavigate();
 
 	return (
@@ -71,11 +67,6 @@ const NavBar = ({
 						) : (
 							<div className=" flex flex-col justify-center items-center w-full gap-3 mb-10">
 								<div className="flex justify-center gap-3 items-center w-full">
-									{/* <img
-										src="/images/circleUserImg.png"
-										alt="user Gif"
-										className="max-h-16 p-[9px]"
-									/> */}
 									{["admin"].includes(role) ? (
 										<FcBusinessman className="text-5xl" />
 									) : (
@@ -87,7 +78,7 @@ const NavBar = ({
 										</div>
 										<div className="font-normal text-sm">{userData.Role}</div>
 									</div>
-									{/* <FaPowerOff
+									<FaPowerOff
 										className="text-2xl cursor-pointer text-ternary"
 										title="Logout"
 										onClick={() => {
@@ -98,56 +89,8 @@ const NavBar = ({
 												setError,
 											});
 										}}
-									/> */}
-									<IoMdLogOut
-										className="text-4xl cursor-pointer text-ternary"
-										title="Logout"
-										onClick={() => {
-											handleLogout({
-												setUserData,
-												navigate,
-												setLoading,
-												setError,
-											});
-										}}
 									/>
-									{/* <IoIosArrowDown
-										className="text-2xl cursor-pointer"
-										style={{
-											transitionDuration: "0.3s",
-											transform: logoutAnimation
-												? "rotate(180deg)"
-												: "rotate(0deg)",
-										}}
-										onClick={(e) => {
-											e.stopPropagation();
-											setLogoutAnimation(!logoutAnimation);
-										}}
-									/> */}
 								</div>
-
-								{/* <div
-									onClick={() => {
-										logoutAnimation &&
-											handleLogout({
-												setUserData,
-												navigate,
-												setLoading,
-												setError,
-											});
-									}}
-									className="z-0 flex justify-center items-center text-md gap-1 "
-									style={{
-										cursor: logoutAnimation ? "pointer" : "default",
-										translate: logoutAnimation ? "0px -5px" : "0px -30px",
-										opacity: !logoutAnimation ? "0" : "100",
-										transition: "linear",
-										transitionDuration: "0.2s",
-									}}
-								>
-									<RiLogoutBoxFill className="text-xl" />
-									Logout
-								</div> */}
 							</div>
 						)}
 						{/* Nav Items */}

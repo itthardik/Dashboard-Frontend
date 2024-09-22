@@ -13,8 +13,15 @@ export const Layout = () => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<boolean>();
 
-	const { setUserData, setMqttClient, connection, setConnection, userData } =
-		useConfig();
+	const {
+		setUserData,
+		setMqttClient,
+		connection,
+		setConnection,
+		userData,
+		setMqttInventoryMessages,
+		setMqttInventoryNotification,
+	} = useConfig();
 
 	useEffect(() => {
 		const checkTokenExpiration = () => {
@@ -70,14 +77,20 @@ export const Layout = () => {
 			});
 
 			client.on("message", (topic: any, message: any) => {
-				// const payload = { topic, message: message.toString() };
-				// setMessages((prevMessages) => [...prevMessages, payload]);
+				if (topic == "inventory/orderItems") {
+					setMqttInventoryMessages(JSON.parse(message));
+				} else if (topic == "inventory/notificationAlert") {
+					setMqttInventoryNotification(JSON.parse(message));
+				} else {
+					console.log(message);
+					console.log(JSON.parse(message));
+				}
 			});
 			client.on("error", (e: any) => {
 				client.end();
 				setMqttClient(null);
-				toast.error(e.message);
-				return;
+				setConnection(null);
+				throw new Error(e.message);
 			});
 
 			return () => {
@@ -92,23 +105,21 @@ export const Layout = () => {
 	// only when new connection is made
 	useEffect(() => {
 		if (userData === null) return;
-		if (connection) {
+		if (connection != null) {
 			connection
 				.start()
 				.then((result: any) => {
 					toast.success("Connected to SignalR hub");
-					// connection.on("ReceiveMessage", (topic: any, message: any) => {
-					// 	// setMessages((prevMessages) => [
-					// 	// 	...prevMessages,
-					// 	// 	{ topic, message },
-					// 	// ]);
-					// });
+					connection.on("ReceiveMessage", (topic: any, message: any) => {
+						// console.log(topic + "\n" + message);
+					});
 				})
 				.catch((e: any) => {
 					// toast.error("Connection failed: ", e);
 				});
 		}
 	}, [connection, userData]);
+
 	if (!loading)
 		return (
 			<div className="flex flex-col justify-center items-center text-center h-lvh">
@@ -125,9 +136,11 @@ export const Layout = () => {
 		return (
 			<div className="flex sm:flex-row flex-col bg-white justify-center h-full">
 				<NavBar setLoading={setLoading} setError={setError} />
-				<div className="h-full sm:w-5/6 w-full flex flex-col justify-center items-center text-center ">
+				<div className="h-full sm:w-5/6 w-full flex flex-col justify-center items-center text-center">
 					<Outlet />
 				</div>
 			</div>
 		);
 };
+//todo
+//throw request with the script

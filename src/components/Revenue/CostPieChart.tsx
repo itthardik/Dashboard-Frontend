@@ -1,16 +1,27 @@
 import React, { useEffect, useRef } from "react";
-import { Chart, ChartData, ChartOptions } from "chart.js/auto";
+import {
+	Chart,
+	DoughnutController,
+	ArcElement,
+	Tooltip,
+	Legend,
+	ChartData,
+	ChartOptions,
+} from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import { ProductData } from "../../model/ProductType";
 
-interface CostData {
-	costPrice: number;
-	sellingPrice: number;
-	shippingCost: number;
-	discount: number;
-	netProfit: number;
-}
+// Register the required components
+Chart.register(
+	DoughnutController,
+	ArcElement,
+	Tooltip,
+	Legend,
+	ChartDataLabels
+);
 
 interface CostPieChartProps {
-	data: CostData;
+	data: ProductData | undefined;
 }
 
 const CostPieChart: React.FC<CostPieChartProps> = ({ data }) => {
@@ -19,11 +30,14 @@ const CostPieChart: React.FC<CostPieChartProps> = ({ data }) => {
 
 	useEffect(() => {
 		const total =
-			data.costPrice +
-			data.sellingPrice +
-			data.shippingCost +
-			data.discount +
-			data.netProfit;
+			data != null
+				? data.costPrice +
+				  data.sellingPrice +
+				  data.shippingCost +
+				  data.discount +
+				  data.netProfit
+				: 0;
+
 		const chartData: ChartData<"doughnut"> = {
 			labels: [
 				"Cost Price",
@@ -35,11 +49,11 @@ const CostPieChart: React.FC<CostPieChartProps> = ({ data }) => {
 			datasets: [
 				{
 					data: [
-						data.costPrice,
-						data.sellingPrice,
-						data.shippingCost,
-						data.discount,
-						data.netProfit,
+						data?.costPrice ?? 0,
+						data?.sellingPrice ?? 0,
+						data?.shippingCost ?? 0,
+						data?.discount ?? 0,
+						data?.netProfit ?? 0,
 					],
 					backgroundColor: [
 						"#FF6384",
@@ -73,6 +87,18 @@ const CostPieChart: React.FC<CostPieChartProps> = ({ data }) => {
 							const percentage = ((value / total) * 100).toFixed(2);
 							return `${label}: ${value} (${percentage}%)`;
 						},
+					},
+				},
+				datalabels: {
+					color: "#fff",
+					formatter: (value: number) => {
+						const percentage = ((value / total) * 100).toFixed(2);
+						return `${percentage}%`;
+					},
+					font: {
+						size: 18,
+						weight: "bold",
+						style: "oblique",
 					},
 				},
 			},

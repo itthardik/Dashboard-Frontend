@@ -10,14 +10,23 @@ interface ConfigContextType {
 	setMqttClient: React.Dispatch<React.SetStateAction<mqtt.MqttClient | null>>;
 	connection: HubConnection | null;
 	setConnection: React.Dispatch<React.SetStateAction<HubConnection | null>>;
+	mqttInventoryMessages: any[];
+	setMqttInventoryMessages: React.Dispatch<React.SetStateAction<any[]>>;
+	mqttInventoryNotification: any;
+	setMqttInventoryNotification: React.Dispatch<React.SetStateAction<any>>;
 }
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
 
 export const ConfigProvider = ({ children }: { children: ReactNode }) => {
+	const [mqttInventoryNotification, setMqttInventoryNotification] =
+		useState<any>();
 	const [userData, setUserData] = useState(GetCookieData());
 	const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
 	const [connection, setConnection] = useState<HubConnection | null>(null);
+	const [mqttInventoryMessages, setMqttInventoryMessages] = useState<
+		{ ProductId: number; Quantity: number }[]
+	>([]);
 
 	return (
 		<ConfigContext.Provider
@@ -28,6 +37,10 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
 				setMqttClient,
 				connection,
 				setConnection,
+				mqttInventoryMessages,
+				setMqttInventoryMessages,
+				mqttInventoryNotification,
+				setMqttInventoryNotification,
 			}}
 		>
 			{children}

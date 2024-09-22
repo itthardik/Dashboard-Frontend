@@ -1,24 +1,34 @@
 import { toast } from "react-toastify";
-import { useConfig } from "./ContextApi";
+import { MqttClient } from "mqtt/*";
 
-export const subscribeToTopic = (topic: any) => {
+export const subscribeToTopic = (topic: any, mqttClient: MqttClient | null) => {
 	try {
-		const { mqttClient } = useConfig();
 		if (!mqttClient) return;
-
 		mqttClient.subscribe(topic, { qos: 0 });
 	} catch (e: any) {
 		toast.error("Login Required!");
 	}
 };
-
-export const publishMessage = (topic: any, message: any) => {
+export const unsubscribeToTopic = (
+	topic: any,
+	mqttClient: MqttClient | null
+) => {
 	try {
-		const { mqttClient } = useConfig();
 		if (!mqttClient) return;
 
-		mqttClient.publish(topic, message);
+		mqttClient.unsubscribe(topic);
 	} catch (e: any) {
 		toast.error("Login Required!");
 	}
 };
+
+// export const publishMessage = (topic: any, message: any) => {
+// 	try {
+// 		const { mqttClient } = useConfig();
+// 		if (!mqttClient) return;
+
+// 		mqttClient.publish(topic, message);
+// 	} catch (e: any) {
+// 		toast.error("Login Required!");
+// 	}
+// };
