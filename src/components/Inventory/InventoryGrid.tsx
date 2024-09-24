@@ -57,14 +57,14 @@ const InventoryGrid = ({
 			sortFilterKey:
 				updateFilterKey === "realtime" ? "productId" : sortFilterKey,
 			pageSize: updateFilterKey === "realtime" ? 99999 : 12,
-			currPage,
+			currPage: updateFilterKey === "realtime" ? 1 : currPage,
 			setLoading,
 			setError,
 			setInventoryData,
 			setMaxPages,
 		});
 		setSearchParams({
-			page: currPage.toString(),
+			page: updateFilterKey === "realtime" ? "1" : currPage.toString(),
 			sortFilterKey:
 				updateFilterKey === "realtime" ? "productId" : sortFilterKey,
 			updateFilterKey,

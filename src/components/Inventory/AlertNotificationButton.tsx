@@ -61,7 +61,7 @@ const AlertNotificationButton = ({
 			setMaxPages,
 			setInventoryNotifications,
 		});
-	}, []);
+	}, [currPage]);
 	const handleSubmit = (id: number, restockAmt: number) => {
 		setAlertModel(false);
 		setAddInventoryId(id);
@@ -120,41 +120,53 @@ const AlertNotificationButton = ({
 								</div>
 							);
 						})}
-						<div className="flex justify-between items-center px-5 pt-4 text-md w-full">
-							<div
-								className={
-									"flex select-none items-center gap-2 border-2 rounded-full py-2 px-4 cursor-pointer font-bold" +
-									(currPage <= 1
-										? " border-ternary text-ternary"
-										: " border-primary text-primary hover:bg-primary hover:text-white")
-								}
-								onClick={() => {
-									if (currPage > 1) setCurrPage(currPage - 1);
-								}}
-							>
-								<GrLinkPrevious />
-								Previous
+						{inventoryNotifications?.length === 0 && (
+							<div className="overflow-hidden mb-5">
+								<img
+									src="/gif/noNotification.gif"
+									alt="Login Gif"
+									className="h-[45%] scale-105"
+								/>
+								<div className="text-2xl font-light">No Notification</div>
 							</div>
+						)}
+						{inventoryNotifications?.length !== 0 && (
+							<div className="flex justify-between items-center px-5 pt-4 text-md w-full">
+								<div
+									className={
+										"flex select-none items-center gap-2 border-2 rounded-full py-2 px-4 cursor-pointer font-bold" +
+										(currPage <= 1
+											? " border-ternary text-ternary"
+											: " border-primary text-primary hover:bg-primary hover:text-white")
+									}
+									onClick={() => {
+										if (currPage > 1) setCurrPage(currPage - 1);
+									}}
+								>
+									<GrLinkPrevious />
+									Previous
+								</div>
 
-							<div>
-								{currPage} / {maxPages}
-							</div>
+								<div>
+									{currPage} / {maxPages}
+								</div>
 
-							<div
-								className={
-									"flex select-none items-center gap-2 border-2 rounded-full py-2 px-4 cursor-pointer font-bold" +
-									(currPage >= maxPages
-										? " border-ternary text-ternary"
-										: " border-primary text-primary hover:bg-primary hover:text-white")
-								}
-								onClick={() => {
-									if (currPage < maxPages) setCurrPage(currPage + 1);
-								}}
-							>
-								Next
-								<GrLinkNext />
+								<div
+									className={
+										"flex select-none items-center gap-2 border-2 rounded-full py-2 px-4 cursor-pointer font-bold" +
+										(currPage >= maxPages
+											? " border-ternary text-ternary"
+											: " border-primary text-primary hover:bg-primary hover:text-white")
+									}
+									onClick={() => {
+										if (currPage < maxPages) setCurrPage(currPage + 1);
+									}}
+								>
+									Next
+									<GrLinkNext />
+								</div>
 							</div>
-						</div>
+						)}
 					</div>
 				</div>
 			)}

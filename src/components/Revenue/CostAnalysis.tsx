@@ -13,16 +13,17 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 		id: true,
 		name: false,
 	});
+	const [clearSearch, setClearSearch] = useState(false);
 	useEffect(() => {
 		handelProductSearch({
 			searchParams,
-			searchValue,
+			searchValue: searchValue === "" ? "1" : searchValue,
 			setSearchValue,
 			setProductData,
 			setLoading,
 			setError,
 		});
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+	}, [clearSearch]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (!loading) {
 		return (
@@ -39,13 +40,14 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 						<SearchProduct
 							bgColor="bg-white"
 							searchValue={searchValue}
+							clearSearch={clearSearch}
 							setSearchValue={setSearchValue}
 							searchParams={searchParams}
 							setSearchParams={setSearchParams}
 							setProductData={setProductData}
 							setLoading={setLoading}
 							setError={setError}
-							setClearSearch={null}
+							setClearSearch={setClearSearch}
 						/>
 					</div>
 				</div>
