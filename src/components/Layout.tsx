@@ -21,6 +21,8 @@ export const Layout = () => {
 		userData,
 		setMqttInventoryMessages,
 		setMqttInventoryNotification,
+		setMqttSalesByCategory,
+		setMqttOverallSales,
 	} = useConfig();
 
 	useEffect(() => {
@@ -68,21 +70,25 @@ export const Layout = () => {
 			const client = mqtt.connect("ws://localhost:9001", options);
 			client.on("connect", () => {
 				setMqttClient(client);
-				toast.success("Connected to broker");
+				// toast.success("Connected to broker");
 			});
 			client.on("close", () => {
 				client.end();
-				toast.error("Disconnected to broker");
+				// toast.error("Disconnected to broker");
 				setMqttClient(null);
 			});
 
 			client.on("message", (topic: any, message: any) => {
-				if (topic == "inventory/orderItems") {
+				if (topic === "inventory/orderItems") {
 					setMqttInventoryMessages(JSON.parse(message));
-				} else if (topic == "inventory/notificationAlert") {
+				} else if (topic === "inventory/notificationAlert") {
 					setMqttInventoryNotification(JSON.parse(message));
+				} else if (topic === "sales/salesByCategory") {
+					setMqttSalesByCategory(JSON.parse(message));
+				} else if (topic === "sales/overallSales") {
+					setMqttOverallSales(JSON.parse(message));
 				} else {
-					console.log(message);
+					console.log(topic);
 					console.log(JSON.parse(message));
 				}
 			});
@@ -109,10 +115,8 @@ export const Layout = () => {
 			connection
 				.start()
 				.then((result: any) => {
-					toast.success("Connected to SignalR hub");
-					connection.on("ReceiveMessage", (topic: any, message: any) => {
-						// console.log(topic + "\n" + message);
-					});
+					// toast.success("Connected to SignalR hub");
+					connection.on("ReceiveMessage", (topic: any, message: any) => {});
 				})
 				.catch((e: any) => {
 					// toast.error("Connection failed: ", e);

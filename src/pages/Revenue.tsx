@@ -3,13 +3,9 @@ import CostAnalysis from "../components/Revenue/CostAnalysis";
 import ErrorPage from "./ErrorPage";
 import SearchValueRanker from "../components/Revenue/SearchValueRanker";
 import RevenueAndProfit from "../components/Revenue/RevenueAndProfit";
-import { useConfig } from "../api/ContextApi";
-import { subscribeToTopic } from "../api/mqttController";
 
 const Revenue = () => {
 	const [error, setError] = useState<any>();
-	const { mqttClient } = useConfig();
-	subscribeToTopic("revenue", mqttClient);
 	if (error) {
 		return <ErrorPage error={error} />;
 	}

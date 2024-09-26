@@ -9,7 +9,6 @@ import { ConfigProvider } from "./api/ContextApi";
 import Sales from "./pages/Sales";
 import Inventory from "./pages/Inventory";
 import Revenue from "./pages/Revenue";
-import Users from "./pages/Users";
 import CustomerSupport from "./pages/CustomerSupport";
 
 function App() {
@@ -35,10 +34,10 @@ function App() {
 					path: "/revenue",
 					element: <Revenue />,
 				},
-				{
-					path: "/users",
-					element: <Users />,
-				},
+				// {
+				// 	path: "/users",
+				// 	element: <Users />,
+				// },
 				{
 					path: "/customerSupport",
 					element: <CustomerSupport />,

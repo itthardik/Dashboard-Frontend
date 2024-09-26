@@ -14,6 +14,20 @@ interface ConfigContextType {
 	setMqttInventoryMessages: React.Dispatch<React.SetStateAction<any[]>>;
 	mqttInventoryNotification: any;
 	setMqttInventoryNotification: React.Dispatch<React.SetStateAction<any>>;
+	mqttSalesByCategory: { CategoryId: number; Quantity: number } | null;
+	setMqttSalesByCategory: React.Dispatch<
+		React.SetStateAction<{ CategoryId: number; Quantity: number } | null>
+	>;
+	mqttOverallSales: {
+		TotalQuantity: number;
+		CurrentDateTime: string;
+	} | null;
+	setMqttOverallSales: React.Dispatch<
+		React.SetStateAction<{
+			TotalQuantity: number;
+			CurrentDateTime: string;
+		} | null>
+	>;
 }
 
 const ConfigContext = createContext<ConfigContextType | undefined>(undefined);
@@ -27,6 +41,14 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
 	const [mqttInventoryMessages, setMqttInventoryMessages] = useState<
 		{ ProductId: number; Quantity: number }[]
 	>([]);
+	const [mqttSalesByCategory, setMqttSalesByCategory] = useState<{
+		CategoryId: number;
+		Quantity: number;
+	} | null>(null);
+	const [mqttOverallSales, setMqttOverallSales] = useState<{
+		TotalQuantity: number;
+		CurrentDateTime: string;
+	} | null>(null);
 
 	return (
 		<ConfigContext.Provider
@@ -41,6 +63,10 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
 				setMqttInventoryMessages,
 				mqttInventoryNotification,
 				setMqttInventoryNotification,
+				mqttSalesByCategory,
+				setMqttSalesByCategory,
+				mqttOverallSales,
+				setMqttOverallSales,
 			}}
 		>
 			{children}

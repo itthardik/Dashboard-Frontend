@@ -4,7 +4,6 @@ import { IoMdHelpCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
 import {
 	FcBusinessman,
 	FcComboChart,
-	FcConferenceCall,
 	FcCurrencyExchange,
 	FcCustomerSupport,
 	FcManager,
@@ -116,13 +115,13 @@ const NavBar = ({
 									Icon={FcCurrencyExchange}
 								/>
 							)}
-							{["admin"].includes(role) && (
+							{/* {["admin"].includes(role) && (
 								<NavbarLink
 									navLink="/users"
 									navText="Users"
 									Icon={FcConferenceCall}
 								/>
-							)}
+							)} */}
 							{["admin", "support"].includes(role) && (
 								<NavbarLink
 									navLink="/customerSupport"

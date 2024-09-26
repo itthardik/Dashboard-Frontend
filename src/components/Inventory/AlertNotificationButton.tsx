@@ -25,22 +25,31 @@ const AlertNotificationButton = ({
 	const [maxPages, setMaxPages] = useState<number>(1);
 
 	const [loading, setLoading] = useState(false);
+	const [alertOnMessage, setAlertOnMessage] = useState(false);
 	const [inventoryNotifications, setInventoryNotifications] = useState<
 		any[] | null
 	>([]);
 	const { mqttInventoryNotification, setMqttInventoryNotification } =
 		useConfig();
 
+	const handleActivate = () => {
+		setAlertOnMessage(true);
+		setTimeout(() => {
+			setAlertOnMessage(false);
+		}, 2000);
+	};
+
 	useEffect(() => {
 		if (inventoryNotifications == null) return;
 		if (mqttInventoryNotification == null) return;
 
+		handleActivate();
+
 		var tempInventoryNotification: any[] = [];
 		var alertExists = false;
 
-		inventoryNotifications.map((notification) => {
+		inventoryNotifications.forEach((notification) => {
 			if (notification.Id === mqttInventoryNotification.Id) {
-				console.log(notification, mqttInventoryNotification);
 				alertExists = true;
 				notification = mqttInventoryNotification;
 			}
@@ -51,7 +60,7 @@ const AlertNotificationButton = ({
 		if (!alertExists) tempInventoryNotification.push(mqttInventoryNotification);
 
 		setInventoryNotifications(tempInventoryNotification);
-	}, [mqttInventoryNotification, setMqttInventoryNotification]);
+	}, [mqttInventoryNotification, setMqttInventoryNotification]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		fetchInventoryNotificationData({
@@ -69,7 +78,11 @@ const AlertNotificationButton = ({
 		setAddInventoryModel(true);
 	};
 	return (
-		<div className="bg-primary rounded-full p-2 cursor-pointer relative">
+		<div
+			className={`bg-primary rounded-full p-2 cursor-pointer relative ${
+				alertOnMessage && "hithere"
+			}`}
+		>
 			<TbBellRinging
 				className="text-white text-3xl"
 				onClick={() => {
@@ -89,7 +102,7 @@ const AlertNotificationButton = ({
 						</div>
 					)}
 					<div className="flex flex-col gap-4 justify-center items-center">
-						{inventoryNotifications?.map((n) => {
+						{inventoryNotifications?.map((n, i) => {
 							return (
 								<div
 									className="p-4 shadow-md rounded-md max-w-md mx-auto flex flex-col justify-center items-start text-left bg-secondary"
@@ -120,7 +133,7 @@ const AlertNotificationButton = ({
 								</div>
 							);
 						})}
-						{inventoryNotifications?.length === 0 && (
+						{!inventoryNotifications && (
 							<div className="overflow-hidden mb-5">
 								<img
 									src="/gif/noNotification.gif"
@@ -130,7 +143,7 @@ const AlertNotificationButton = ({
 								<div className="text-2xl font-light">No Notification</div>
 							</div>
 						)}
-						{inventoryNotifications?.length !== 0 && (
+						{inventoryNotifications && (
 							<div className="flex justify-between items-center px-5 pt-4 text-md w-full">
 								<div
 									className={
