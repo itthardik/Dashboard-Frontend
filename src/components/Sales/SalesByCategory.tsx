@@ -29,7 +29,7 @@ const SalesByCategory = ({
 
 		var tempSales: any[] = [];
 
-		salesDataByCategory.map((sales) => {
+		salesDataByCategory.forEach((sales) => {
 			if (sales.categoryId === mqttSalesByCategory.CategoryId) {
 				sales.totalSales += mqttSalesByCategory.Quantity;
 			}
@@ -37,7 +37,7 @@ const SalesByCategory = ({
 		});
 
 		setSalesDataByCategory(tempSales);
-	}, [mqttSalesByCategory, setMqttSalesByCategory]);
+	}, [mqttSalesByCategory, setMqttSalesByCategory]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		fetchSalesDataByCategoryByFilterKey({

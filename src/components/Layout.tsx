@@ -2,7 +2,6 @@ import { Outlet } from "react-router";
 import NavBar from "./NavBar";
 import { useEffect, useState } from "react";
 import { useConfig } from "./../api/ContextApi";
-import { HubConnectionBuilder } from "@microsoft/signalr";
 import { toast } from "react-toastify";
 import mqtt, { IClientOptions } from "mqtt";
 import Loading from "./Loading";
@@ -16,8 +15,6 @@ export const Layout = () => {
 	const {
 		setUserData,
 		setMqttClient,
-		connection,
-		setConnection,
 		userData,
 		setMqttInventoryMessages,
 		setMqttInventoryNotification,
@@ -52,13 +49,6 @@ export const Layout = () => {
 			if (userData === null) return;
 
 			setUserData(userData);
-			// Setup SignalR connection
-			const newConnection = new HubConnectionBuilder()
-				.withUrl("https://localhost:7012/mqtthub")
-				.withAutomaticReconnect()
-				.build();
-
-			setConnection(newConnection);
 
 			const options: IClientOptions = {
 				host: "localhost",
@@ -95,7 +85,6 @@ export const Layout = () => {
 			client.on("error", (e: any) => {
 				client.end();
 				setMqttClient(null);
-				setConnection(null);
 				throw new Error(e.message);
 			});
 
@@ -106,23 +95,6 @@ export const Layout = () => {
 			toast.error(ex.message);
 		}
 	}, [userData, setUserData]); // eslint-disable-line react-hooks/exhaustive-deps
-
-	// starting signalR connection and adding the on receive and on start events
-	// only when new connection is made
-	useEffect(() => {
-		if (userData === null) return;
-		if (connection != null) {
-			connection
-				.start()
-				.then((result: any) => {
-					// toast.success("Connected to SignalR hub");
-					connection.on("ReceiveMessage", (topic: any, message: any) => {});
-				})
-				.catch((e: any) => {
-					// toast.error("Connection failed: ", e);
-				});
-		}
-	}, [connection, userData]);
 
 	if (!loading)
 		return (
@@ -146,5 +118,3 @@ export const Layout = () => {
 			</div>
 		);
 };
-//todo
-//throw request with the script

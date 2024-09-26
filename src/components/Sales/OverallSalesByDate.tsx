@@ -26,7 +26,7 @@ const OverallSalesByDate = ({
 			setError: setError,
 			setOverallSalesData: setOverallSalesData,
 		});
-	}, [filterDate]);
+	}, [filterDate]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (!loading) {
 		return (

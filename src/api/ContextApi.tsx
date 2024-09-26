@@ -1,15 +1,12 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { GetCookieData } from "../utility/GetCookieData";
 import mqtt from "mqtt/*";
-import { HubConnection } from "@microsoft/signalr";
 
 interface ConfigContextType {
 	userData: any;
 	setUserData: React.Dispatch<any>;
 	mqttClient: mqtt.MqttClient | null;
 	setMqttClient: React.Dispatch<React.SetStateAction<mqtt.MqttClient | null>>;
-	connection: HubConnection | null;
-	setConnection: React.Dispatch<React.SetStateAction<HubConnection | null>>;
 	mqttInventoryMessages: any[];
 	setMqttInventoryMessages: React.Dispatch<React.SetStateAction<any[]>>;
 	mqttInventoryNotification: any;
@@ -37,7 +34,6 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
 		useState<any>();
 	const [userData, setUserData] = useState(GetCookieData());
 	const [mqttClient, setMqttClient] = useState<mqtt.MqttClient | null>(null);
-	const [connection, setConnection] = useState<HubConnection | null>(null);
 	const [mqttInventoryMessages, setMqttInventoryMessages] = useState<
 		{ ProductId: number; Quantity: number }[]
 	>([]);
@@ -57,8 +53,6 @@ export const ConfigProvider = ({ children }: { children: ReactNode }) => {
 				setUserData,
 				mqttClient,
 				setMqttClient,
-				connection,
-				setConnection,
 				mqttInventoryMessages,
 				setMqttInventoryMessages,
 				mqttInventoryNotification,

@@ -30,7 +30,7 @@ const AddInventoryButton = ({
 	useEffect(() => {
 		setProductId(addInventoryId);
 		setRequiredStock(addInventoryRestock);
-	}, [addInventoryId]);
+	}, [addInventoryId]); // eslint-disable-line react-hooks/exhaustive-deps
 	return (
 		<div className="bg-primary rounded-full p-2 cursor-pointer relative select-none">
 			<MdOutlineAddShoppingCart

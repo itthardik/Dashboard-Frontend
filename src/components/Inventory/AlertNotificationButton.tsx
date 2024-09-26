@@ -32,16 +32,25 @@ const AlertNotificationButton = ({
 	const { mqttInventoryNotification, setMqttInventoryNotification } =
 		useConfig();
 
+	const notificationSound = new Audio("/notification.mp3");
+
 	const handleActivate = () => {
 		setAlertOnMessage(true);
+		notificationSound.play().catch((err) => {
+			console.log("Failed to play sound:", err);
+		});
 		setTimeout(() => {
 			setAlertOnMessage(false);
 		}, 2000);
 	};
 
 	useEffect(() => {
-		if (inventoryNotifications == null) return;
 		if (mqttInventoryNotification == null) return;
+		if (inventoryNotifications == null) {
+			setInventoryNotifications([mqttInventoryNotification]);
+			handleActivate();
+			return;
+		}
 
 		handleActivate();
 
@@ -60,6 +69,7 @@ const AlertNotificationButton = ({
 		if (!alertExists) tempInventoryNotification.push(mqttInventoryNotification);
 
 		setInventoryNotifications(tempInventoryNotification);
+		setMqttInventoryNotification(null);
 	}, [mqttInventoryNotification, setMqttInventoryNotification]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
@@ -120,12 +130,12 @@ const AlertNotificationButton = ({
 									</p>
 									<button
 										className="bg-primary text-white px-4 py-2 rounded w-full flex justify-center items-center gap-2"
-										onClick={() =>
+										onClick={() => {
 											handleSubmit(
 												n.ProductId,
 												Math.ceil(n.Product.AverageDailyUsage * 90 + 10)
-											)
-										}
+											);
+										}}
 									>
 										<MdOutlineAddShoppingCart className="text-2xl" />
 										<div className="font-semibold">Add New Stock</div>
@@ -133,7 +143,8 @@ const AlertNotificationButton = ({
 								</div>
 							);
 						})}
-						{!inventoryNotifications && (
+						{(!inventoryNotifications ||
+							inventoryNotifications.length === 0) && (
 							<div className="overflow-hidden mb-5">
 								<img
 									src="/gif/noNotification.gif"
@@ -143,7 +154,7 @@ const AlertNotificationButton = ({
 								<div className="text-2xl font-light">No Notification</div>
 							</div>
 						)}
-						{inventoryNotifications && (
+						{inventoryNotifications && inventoryNotifications.length !== 0 && (
 							<div className="flex justify-between items-center px-5 pt-4 text-md w-full">
 								<div
 									className={

@@ -118,7 +118,7 @@ export const addInventory = async ({
 			throw new Error(result);
 		} else {
 			var temp: any[] = [];
-			inventoryData.map((i) => {
+			inventoryData.forEach((i) => {
 				if (i.id === result.data.Id) i.currentStock = result.data.CurrentStock;
 				temp.push(i);
 			});

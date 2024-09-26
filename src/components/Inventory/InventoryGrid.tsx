@@ -1,7 +1,7 @@
 import Loading from "../Loading";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import SearchProduct from "../Revenue/SearchProduct";
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useState } from "react";
 import { ProductData } from "../../model/ProductType";
 import { fetchInventoryData } from "../../api/inventoryController";
 import { SetURLSearchParams } from "react-router-dom";

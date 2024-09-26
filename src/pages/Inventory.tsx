@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import ErrorPage from "./ErrorPage";
 import InventoryGrid from "../components/Inventory/InventoryGrid";
 import { useSearchParams } from "react-router-dom";
-import { TbBellRinging } from "react-icons/tb";
 import { ProductData } from "../model/ProductType";
 import AddInventoryButton from "../components/Inventory/AddInventoryButton";
 import { useConfig } from "../api/ContextApi";
@@ -46,8 +45,8 @@ const Inventory = () => {
 
 		var tempInventory: any[] = [];
 
-		mqttInventoryMessages.map((message) => {
-			inventoryData.map((inventory) => {
+		mqttInventoryMessages.forEach((message) => {
+			inventoryData.forEach((inventory) => {
 				if (inventory.id === message.ProductId) {
 					inventory.currentStock -= message.Quantity;
 					inventory.updatedAt = Date();
@@ -58,7 +57,8 @@ const Inventory = () => {
 		});
 
 		setInventoryData(tempInventory);
-	}, [mqttInventoryMessages, setMqttInventoryMessages]);
+	}, [mqttInventoryMessages, setMqttInventoryMessages]); // eslint-disable-line react-hooks/exhaustive-deps
+
 	if (error) {
 		return <ErrorPage error={error} />;
 	}
