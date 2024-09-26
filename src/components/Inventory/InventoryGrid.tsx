@@ -81,7 +81,7 @@ const InventoryGrid = ({
 		return (
 			<div className="mx-5 mt-2 my-10 px-2 flex flex-col min-h-[550px]">
 				<div className="flex justify-start items-center gap-5 w-full pb-10	">
-					<h1 className="text-2xl py-2 font-medium text-left ">
+					<h1 className="text-2xl py-2 font-medium text-left select-none">
 						Monitor Stock Levels
 					</h1>
 					<div className="w-2/5">

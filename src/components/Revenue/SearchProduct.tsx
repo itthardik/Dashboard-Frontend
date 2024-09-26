@@ -85,14 +85,15 @@ const SearchProduct = ({
 				<GoSearch
 					className="text-xl cursor-pointer"
 					onClick={() => {
-						handelProductSearch({
-							searchParams,
-							searchValue,
-							setSearchValue,
-							setProductData,
-							setLoading,
-							setError,
-						});
+						if (searchValue !== "")
+							handelProductSearch({
+								searchParams,
+								searchValue,
+								setSearchValue,
+								setProductData,
+								setLoading,
+								setError,
+							});
 					}}
 				/>
 			</div>

@@ -28,7 +28,10 @@ const RealtimeSales = () => {
 	return (
 		<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col min-h-[550px]">
 			<div className="flex justify-start items-center gap-10 w-full">
-				<h1 className="text-2xl font-bold">Realtime Sales Data</h1>
+				<h1 className="text-2xl font-bold flex justify-center items-center gap-2">
+					Live Sales Data
+					<div className="text-lg font-normal">(Changes Every Minute)</div>
+				</h1>
 			</div>
 			<div className="flex justify-evenly px-10 pt-5">
 				<LiveLineChart newDataPoint={newDataPoint} newLabel={newLabel} />

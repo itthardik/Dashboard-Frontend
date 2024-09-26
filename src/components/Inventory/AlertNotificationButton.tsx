@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TbBellRinging } from "react-icons/tb";
 import { fetchInventoryNotificationData } from "../../api/inventoryController";
 import ErrorPage from "../../pages/ErrorPage";
@@ -33,6 +33,9 @@ const AlertNotificationButton = ({
 		useConfig();
 
 	const notificationSound = new Audio("/notification.mp3");
+
+	const modalRef = useRef<HTMLDivElement | null>(null);
+	const buttonRef = useRef<HTMLDivElement | null>(null);
 
 	const handleActivate = () => {
 		setAlertOnMessage(true);
@@ -72,6 +75,29 @@ const AlertNotificationButton = ({
 		setMqttInventoryNotification(null);
 	}, [mqttInventoryNotification, setMqttInventoryNotification]); // eslint-disable-line react-hooks/exhaustive-deps
 
+	const handleClickOutside = (event: any) => {
+		if (
+			modalRef.current &&
+			!modalRef.current.contains(event.target as Node) &&
+			buttonRef.current &&
+			!buttonRef.current.contains(event.target as Node)
+		) {
+			setAlertModel(false);
+		}
+	};
+
+	useEffect(() => {
+		if (alertModel) {
+			document.addEventListener("mousedown", handleClickOutside);
+		} else {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [alertModel]); // eslint-disable-line react-hooks/exhaustive-deps
+
 	useEffect(() => {
 		fetchInventoryNotificationData({
 			currPage,
@@ -88,22 +114,27 @@ const AlertNotificationButton = ({
 		setAddInventoryModel(true);
 	};
 	return (
-		<div
-			className={`bg-primary rounded-full p-2 cursor-pointer relative ${
-				alertOnMessage && "hithere"
-			}`}
-		>
-			<TbBellRinging
-				className="text-white text-3xl"
-				onClick={() => {
-					setAddInventoryModel(false);
-					setAlertModel(!alertModel);
-				}}
-			/>
+		<div className="relative flex justify-center items-center">
+			<div ref={buttonRef}>
+				<TbBellRinging
+					className={`bg-primary rounded-full cursor-pointer text-white p-2 text-5xl ${
+						alertOnMessage && "hithere"
+					}`}
+					onClick={() => {
+						setAddInventoryModel(false);
+						setAlertModel(!alertModel);
+					}}
+				/>
+			</div>
 			{alertModel && (
-				<div className="absolute z-20 right-5 bg-white rounded-md border shadow-lg px-5 py-4 flex flex-col w-[450px]">
+				<div
+					className="absolute z-20 right-5 top-10 bg-white rounded-md border shadow-lg px-5 py-4 flex flex-col w-[450px] "
+					ref={modalRef}
+				>
 					<div className="flex items-center justify-between z-10 ">
-						<h1 className="text-xl font-bold mb-5">Notification History</h1>
+						<h1 className="text-xl font-bold mb-5 select-none">
+							Notification History
+						</h1>
 					</div>
 					{error && <ErrorPage error={error} />}
 					{!loading && (
@@ -145,7 +176,7 @@ const AlertNotificationButton = ({
 						})}
 						{(!inventoryNotifications ||
 							inventoryNotifications.length === 0) && (
-							<div className="overflow-hidden mb-5">
+							<div className="overflow-hidden mb-5 select-none">
 								<img
 									src="/gif/noNotification.gif"
 									alt="Login Gif"

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdOutlineAddShoppingCart } from "react-icons/md";
 import { addInventory } from "../../api/inventoryController";
 import { ProductData } from "../../model/ProductType";
@@ -27,23 +27,55 @@ const AddInventoryButton = ({
 	const [productId, setProductId] = useState<number>(addInventoryId);
 	const [requiredStock, setRequiredStock] =
 		useState<number>(addInventoryRestock);
+
+	const modalRef = useRef<HTMLDivElement | null>(null);
+	const buttonRef = useRef<HTMLDivElement | null>(null);
+
+	const handleClickOutside = (event: any) => {
+		if (
+			modalRef.current &&
+			!modalRef.current.contains(event.target as Node) &&
+			buttonRef.current &&
+			!buttonRef.current.contains(event.target as Node)
+		) {
+			setAddInventoryModel(false);
+		}
+	};
+
+	useEffect(() => {
+		if (addInventoryModel) {
+			document.addEventListener("mousedown", handleClickOutside);
+		} else {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [addInventoryModel]); // eslint-disable-line react-hooks/exhaustive-deps
+
 	useEffect(() => {
 		setProductId(addInventoryId);
 		setRequiredStock(addInventoryRestock);
 	}, [addInventoryId]); // eslint-disable-line react-hooks/exhaustive-deps
 	return (
-		<div className="bg-primary rounded-full p-2 cursor-pointer relative select-none">
-			<MdOutlineAddShoppingCart
-				className="text-white text-3xl"
-				onClick={() => {
-					setAddInventoryModel(!addInventoryModel);
-					setAlertModel(false);
-					setProductId(0);
-					setRequiredStock(0);
-				}}
-			/>
+		<div className=" relative flex justify-center items-center">
+			<div ref={buttonRef}>
+				<MdOutlineAddShoppingCart
+					className="text-white text-5xl bg-primary rounded-full p-2 cursor-pointer select-none "
+					onClick={() => {
+						setAddInventoryModel(!addInventoryModel);
+						setAlertModel(false);
+						setProductId(0);
+						setRequiredStock(0);
+					}}
+				/>
+			</div>
 			{addInventoryModel && (
-				<div className="absolute z-20 right-5 bg-secondary rounded-md shadow-lg px-10 py-8 flex flex-col w-96 ">
+				<div
+					className="absolute z-20 right-5 bg-secondary rounded-md shadow-lg px-10 py-8 flex flex-col w-96 top-10"
+					ref={modalRef}
+				>
 					<div className="flex items-center justify-center z-10 ">
 						<h1 className="text-xl font-bold">Add Inventory</h1>
 					</div>
