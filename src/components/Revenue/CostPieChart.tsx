@@ -125,7 +125,11 @@ const CostPieChart: React.FC<CostPieChartProps> = ({ data }) => {
 		};
 	}, [data]);
 
-	return <canvas ref={chartRef} />;
+	return (
+		<div className="w-full">
+			<canvas ref={chartRef} />
+		</div>
+	);
 };
 
 export default CostPieChart;

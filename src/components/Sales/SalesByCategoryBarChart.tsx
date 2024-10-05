@@ -120,7 +120,11 @@ const SalesByCategoryBarChart: React.FC<SalesByCategoryBarChartProps> = ({
 		};
 	}, [data]);
 
-	return <canvas ref={chartRef} />;
+	return (
+		<div className="w-full px-10 pt-5">
+			<canvas ref={chartRef} />
+		</div>
+	);
 };
 
 export default SalesByCategoryBarChart;

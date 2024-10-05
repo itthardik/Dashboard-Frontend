@@ -5,6 +5,7 @@ import { fetchSalesDataByCategoryByFilterKey } from "../../api/salesController";
 import SalesByCategoryBarChart from "./SalesByCategoryBarChart";
 import { SetURLSearchParams } from "react-router-dom";
 import { useConfig } from "../../api/ContextApi";
+import { FaChevronUp } from "react-icons/fa";
 
 const SalesByCategory = ({
 	updateFilterKey,
@@ -22,6 +23,17 @@ const SalesByCategory = ({
 	const [loading, setLoading] = useState(true);
 	const [filterKey, setFilterKey] = useState("today");
 	const [salesDataByCategory, setSalesDataByCategory] = useState<any[]>([]);
+	const [isModelOpen, setIsModelOpen] = useState(() => {
+		const savedModelState = localStorage.getItem("isModelOpen_SalesByCategory");
+		return savedModelState ? JSON.parse(savedModelState) : false;
+	});
+
+	useEffect(() => {
+		localStorage.setItem(
+			"isModelOpen_SalesByCategory",
+			JSON.stringify(isModelOpen)
+		);
+	}, [isModelOpen]);
 
 	useEffect(() => {
 		if (salesDataByCategory == null) return;
@@ -59,35 +71,49 @@ const SalesByCategory = ({
 		);
 	} else
 		return (
-			<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col min-h-[550px]">
-				<div className="flex justify-start items-center gap-10 w-full">
-					<h1 className="text-2xl font-bold">Sales Data By Category</h1>
-					<div className="flex justify-center items-center gap-3 w-1/3">
-						<SelectOption
-							filterKey={filterKey}
-							setFilterKey={setFilterKey}
-							optionList={[
-								{ key: "Today", value: "today" },
-								{ key: "Last 3 Days", value: "last3days" },
-								{ key: "Last Week", value: "lastweek" },
-								{ key: "Last Month", value: "lastmonth" },
-								{ key: "Last 3 Months", value: "last3months" },
-								{ key: "Last 6 Months", value: "last6months" },
-								{ key: "Last Year", value: "lastyear" },
-							]}
-						/>
-						<SelectOption
-							key="Updates"
-							filterKey={updateFilterKey}
-							setFilterKey={setUpdateFilterKey}
-							optionList={[
-								{ key: "Updates: Static", value: "static" },
-								{ key: "Updates: Realtime", value: "realtime" },
-							]}
-						/>
+			<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col">
+				<div className="flex justify-between items-center w-full">
+					<div className="flex items-center gap-10">
+						<h1 className="text-2xl font-bold">Sales Data By Category</h1>
+						<div className="flex justify-center items-center gap-3 w-1/3">
+							<SelectOption
+								filterKey={filterKey}
+								setFilterKey={setFilterKey}
+								optionList={[
+									{ key: "Today", value: "today" },
+									{ key: "Last 3 Days", value: "last3days" },
+									{ key: "Last Week", value: "lastweek" },
+									{ key: "Last Month", value: "lastmonth" },
+									{ key: "Last 3 Months", value: "last3months" },
+									{ key: "Last 6 Months", value: "last6months" },
+									{ key: "Last Year", value: "lastyear" },
+								]}
+							/>
+							<SelectOption
+								key="Updates"
+								filterKey={updateFilterKey}
+								setFilterKey={setUpdateFilterKey}
+								optionList={[
+									{ key: "Updates: Static", value: "static" },
+									{ key: "Updates: Realtime", value: "realtime" },
+								]}
+							/>
+						</div>
 					</div>
+					<FaChevronUp
+						className={`select-none text-2xl cursor-pointer transition-transform duration-300 ${
+							isModelOpen ? "rotate-180" : ""
+						}`}
+						onClick={() => {
+							setIsModelOpen(!isModelOpen);
+						}}
+					/>
 				</div>
-				<div className="flex justify-evenly px-10 pt-5">
+				<div
+					className={`transition-all duration-500 ease-in-out ${
+						isModelOpen ? "max-h-0 overflow-hidden" : "max-h-[200vh]"
+					}`}
+				>
 					<SalesByCategoryBarChart data={salesDataByCategory} />
 				</div>
 			</div>

@@ -12,19 +12,23 @@ import {
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Title);
 
 const LiveLineChart = ({
+	last10minDataPoint,
+	last10minLabel,
 	newDataPoint,
 	newLabel,
 }: {
-	newDataPoint: number;
-	newLabel: string;
+	last10minDataPoint: number[];
+	last10minLabel: string[];
+	newDataPoint: number | null;
+	newLabel: string | null;
 }) => {
 	const chartRef = useRef<any>(null);
-	const [chartData, setChartData] = useState<number[]>([]);
-	const [labels, setLabels] = useState<string[]>([]);
+	const [chartData, setChartData] = useState<number[]>(last10minDataPoint);
+	const [labels, setLabels] = useState<string[]>(last10minLabel);
 
 	const addNewData = () => {
-		setChartData((prevData) => [...prevData, newDataPoint].slice(-10));
-		setLabels((prevLabels) => [...prevLabels, newLabel].slice(-10));
+		setChartData((prevData) => [...prevData, newDataPoint!].slice(-10));
+		setLabels((prevLabels) => [...prevLabels, newLabel!].slice(-10));
 
 		if (chartRef.current) {
 			const chart = chartRef.current;
@@ -36,7 +40,11 @@ const LiveLineChart = ({
 	};
 
 	useEffect(() => {
-		addNewData();
+		setChartData(last10minDataPoint);
+		setLabels(last10minLabel);
+	}, [last10minDataPoint, last10minLabel]);
+	useEffect(() => {
+		if (newDataPoint != null || newLabel != null) addNewData();
 	}, [newDataPoint, newLabel]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const data = {
@@ -76,7 +84,11 @@ const LiveLineChart = ({
 		},
 	};
 
-	return <Line ref={chartRef} data={data} options={options} />;
+	return (
+		<div className="w-full px-10 pt-5">
+			<Line ref={chartRef} data={data} options={options} />;
+		</div>
+	);
 };
 
 export default LiveLineChart;

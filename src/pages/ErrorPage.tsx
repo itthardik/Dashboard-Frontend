@@ -1,14 +1,28 @@
+import { IoArrowBackCircle } from "react-icons/io5";
 import { useRouteError } from "react-router";
 import { Link } from "react-router-dom";
 
-export default function ErrorPage({ error }: { error?: any }) {
+export default function ErrorPage({
+	error,
+	setError,
+}: {
+	error?: any;
+	setError?: React.Dispatch<any>;
+}) {
 	const errorByRouter: any = useRouteError();
 	return (
 		<div
 			className={
-				"flex flex-col justify-evenly items-center w-full bg-[#FCFCFC] h-lvh"
+				"flex flex-col justify-evenly items-center w-full bg-[#FCFCFC] h-lvh relative"
 			}
 		>
+			<IoArrowBackCircle
+				className="absolute top-5 left-10 text-primary text-6xl p-1 cursor-pointer"
+				onClick={() => {
+					if (setError) setError(undefined);
+				}}
+			/>
+
 			<img
 				src={
 					["401", "403"].includes(error)
@@ -36,6 +50,10 @@ export default function ErrorPage({ error }: { error?: any }) {
 				</p>
 				<Link
 					to={"/"}
+					reloadDocument
+					onClick={() => {
+						if (setError) setError(undefined);
+					}}
 					className="text-xl rounded-lg bg-yellow-300 py-1 px-3 mt-2"
 				>
 					Back to Home Page

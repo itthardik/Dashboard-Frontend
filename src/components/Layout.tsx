@@ -10,7 +10,7 @@ import { refreshToken } from "../api/authContoller";
 
 export const Layout = () => {
 	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<boolean>();
+	const [error, setError] = useState<any>();
 
 	const {
 		setUserData,
@@ -43,7 +43,6 @@ export const Layout = () => {
 		return () => clearInterval(intervalId);
 	}, [userData, setUserData]);
 
-	// adding new SingnalR connection and mqtt client with basic event (onConnect, onMessage)
 	useEffect(() => {
 		try {
 			if (userData === null) return;
@@ -68,18 +67,19 @@ export const Layout = () => {
 				setMqttClient(null);
 			});
 
-			client.on("message", (topic: any, message: any) => {
+			client.on("message", (topic: string, message: Buffer) => {
+				const messageStr = message.toString();
 				if (topic === "inventory/orderItems") {
-					setMqttInventoryMessages(JSON.parse(message));
+					setMqttInventoryMessages(JSON.parse(messageStr));
 				} else if (topic === "inventory/notificationAlert") {
-					setMqttInventoryNotification(JSON.parse(message));
+					setMqttInventoryNotification(JSON.parse(messageStr));
 				} else if (topic === "sales/salesByCategory") {
-					setMqttSalesByCategory(JSON.parse(message));
+					setMqttSalesByCategory(JSON.parse(messageStr));
 				} else if (topic === "sales/overallSales") {
-					setMqttOverallSales(JSON.parse(message));
+					setMqttOverallSales(JSON.parse(messageStr));
 				} else {
 					console.log(topic);
-					console.log(JSON.parse(message));
+					console.log(JSON.parse(messageStr));
 				}
 			});
 			client.on("error", (e: any) => {
@@ -105,7 +105,7 @@ export const Layout = () => {
 	else if (error) {
 		return (
 			<div className="flex flex-col justify-center items-center text-center h-lvh">
-				<ErrorPage error={error} />;
+				<ErrorPage error={error} setError={setError} />;
 			</div>
 		);
 	} else

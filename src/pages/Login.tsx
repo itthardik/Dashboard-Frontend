@@ -1,7 +1,7 @@
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { handleLoginSubmit } from "../api/authContoller";
-import { IoArrowBackCircleSharp } from "react-icons/io5";
+import { IoArrowBackCircleSharp, IoEyeOff, IoEye } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import { useConfig } from "../api/ContextApi";
 import Loading from "../components/Loading";
@@ -17,6 +17,7 @@ const Login = () => {
 	const [error, setError] = useState<any>();
 	const navigator = useNavigate();
 	const [loading, setLoading] = useState(true);
+	const [showPassword, setShowPassword] = useState(false);
 
 	const validateForm = () => {
 		const newErrors: { [key: string]: string } = {};
@@ -63,7 +64,7 @@ const Login = () => {
 	else if (error) {
 		return (
 			<div className="flex flex-col justify-center items-center text-center h-lvh">
-				<ErrorPage error={error} />;
+				<ErrorPage error={error} setError={setError} />;
 			</div>
 		);
 	} else
@@ -119,14 +120,27 @@ const Login = () => {
 								>
 									Password:
 								</label>
-								<input
-									type="password"
-									id="password"
-									name="password"
-									value={formData.password}
-									onChange={handleChange}
-									className="form-control w-full px-3 py-2 border border-ternary text-ternary rounded-md"
-								/>
+								<div className="relative">
+									<input
+										type={showPassword ? "text" : "password"}
+										id="password"
+										name="password"
+										value={formData.password}
+										onChange={handleChange}
+										className="form-control w-full px-3 py-2 border border-ternary text-ternary rounded-md"
+									/>
+									<button
+										type="button"
+										onClick={() => setShowPassword(!showPassword)}
+										className="absolute top-0 right-0 px-3 py-2 text-primary"
+									>
+										{showPassword ? (
+											<IoEyeOff className="text-3xl" />
+										) : (
+											<IoEye className="text-3xl" />
+										)}
+									</button>
+								</div>
 								{errors.password && (
 									<div className="text-black italic">⚠️ {errors.password}</div>
 								)}

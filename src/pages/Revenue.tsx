@@ -7,7 +7,7 @@ import RevenueAndProfit from "../components/Revenue/RevenueAndProfit";
 const Revenue = () => {
 	const [error, setError] = useState<any>();
 	if (error) {
-		return <ErrorPage error={error} />;
+		return <ErrorPage error={error} setError={setError} />;
 	}
 	return (
 		<div className="w-full h-full flex flex-col gap-2">

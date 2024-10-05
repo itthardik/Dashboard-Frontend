@@ -126,7 +126,11 @@ const RevenueBarChart: React.FC<RevenueBarChartProps> = ({ data }) => {
 		};
 	}, [data]);
 
-	return <canvas ref={chartRef} />;
+	return (
+		<div className="w-full px-10 pt-5">
+			<canvas ref={chartRef} />
+		</div>
+	);
 };
 
 export default RevenueBarChart;

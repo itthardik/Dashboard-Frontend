@@ -1,10 +1,14 @@
-export const GetCookieData = () => {
+type CookieData = {
+	[key: string]: string;
+};
+
+export const GetCookieData = (): CookieData | null => {
 	const cookieString = document.cookie;
 	if (cookieString === "") {
 		return null;
 	}
 	const cookiesArray = cookieString.split("; ");
-	const cookieJson: any = {};
+	const cookieJson: CookieData = { sessionToken: "" };
 
 	cookiesArray.forEach((cookie) => {
 		const [name, value] = cookie.split("=");

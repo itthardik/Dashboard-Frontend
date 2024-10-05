@@ -136,7 +136,7 @@ const AlertNotificationButton = ({
 							Notification History
 						</h1>
 					</div>
-					{error && <ErrorPage error={error} />}
+					{error && <ErrorPage error={error} setError={setError} />}
 					{!loading && (
 						<div className=" mx-5 my-2 p-5 flex flex-col justify-center items-center text-center min-h-[550px]">
 							<Loading />;

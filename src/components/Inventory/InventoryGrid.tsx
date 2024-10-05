@@ -80,68 +80,70 @@ const InventoryGrid = ({
 	} else
 		return (
 			<div className="mx-5 mt-2 my-10 px-2 flex flex-col min-h-[550px]">
-				<div className="flex justify-start items-center gap-5 w-full pb-10	">
-					<h1 className="text-2xl py-2 font-medium text-left select-none">
+				<div className="flex justify-start items-center  w-full pb-10">
+					<h1 className="text-2xl py-2 font-medium text-left select-none w-1/4">
 						Monitor Stock Levels
 					</h1>
-					<div className="w-2/5">
-						<SearchProduct
-							bgColor="bg-secondary"
-							searchParams={searchKeys}
-							searchValue={searchValue}
-							setError={setError}
-							setProductData={setInventoryData}
-							setSearchValue={setSearchValue}
-							setSearchParams={setSearchKeys}
-							setLoading={setLoading}
-							clearSearch={clearSearch}
-							setClearSearch={setClearSearch}
-						/>
-					</div>
-					<div className="min-w-60">
-						<SelectOption
-							key="Sort by"
-							bgColor="bg-secondary"
-							filterKey={
-								updateFilterKey === "realtime" ? "productId" : sortFilterKey
-							}
-							setFilterKey={setSortFilterKey}
-							optionList={
-								updateFilterKey === "realtime"
-									? [
-											{
-												key: "Sort By: Product ID",
-												value: "productId",
-											},
-									  ]
-									: [
-											{
-												key: "Sort By: Low To High Stock",
-												value: "lowToHighStock",
-											},
-											{
-												key: "Sort By: High To Low Stock",
-												value: "highToLowStock",
-											},
-											{
-												key: "Sort By: Product ID",
-												value: "productId",
-											},
-									  ]
-							}
-						/>
-					</div>
-					<div className="max-w-60">
-						<SelectOption
-							key="Updates"
-							bgColor="bg-secondary"
-							filterKey={updateFilterKey}
-							setFilterKey={setUpdateFilterKey}
-							optionList={[
-								{ key: "Updates: Static", value: "static" },
-								{ key: "Updates: Realtime", value: "realtime" },
-							]}
-						/>
+					<div className="flex justify-start items-center gap-5 w-3/4">
+						<div className="w-2/5">
+							<SearchProduct
+								bgColor="bg-secondary"
+								searchParams={searchKeys}
+								searchValue={searchValue}
+								setError={setError}
+								setProductData={setInventoryData}
+								setSearchValue={setSearchValue}
+								setSearchParams={setSearchKeys}
+								setLoading={setLoading}
+								clearSearch={clearSearch}
+								setClearSearch={setClearSearch}
+							/>
+						</div>
+						<div className="min-w-64">
+							<SelectOption
+								key="Sort by"
+								bgColor="bg-secondary"
+								filterKey={
+									updateFilterKey === "realtime" ? "productId" : sortFilterKey
+								}
+								setFilterKey={setSortFilterKey}
+								optionList={
+									updateFilterKey === "realtime"
+										? [
+												{
+													key: "Sort By: Product ID",
+													value: "productId",
+												},
+										  ]
+										: [
+												{
+													key: "Sort By: Low To High Stock",
+													value: "lowToHighStock",
+												},
+												{
+													key: "Sort By: High To Low Stock",
+													value: "highToLowStock",
+												},
+												{
+													key: "Sort By: Product ID",
+													value: "productId",
+												},
+										  ]
+								}
+							/>
+						</div>
+						<div className="min-w-48">
+							<SelectOption
+								key="Updates"
+								bgColor="bg-secondary"
+								filterKey={updateFilterKey}
+								setFilterKey={setUpdateFilterKey}
+								optionList={[
+									{ key: "Updates: Static", value: "static" },
+									{ key: "Updates: Realtime", value: "realtime" },
+								]}
+							/>
+						</div>
 					</div>
 				</div>
 				<div className="flex flex-col justify-center items-center mt-3">

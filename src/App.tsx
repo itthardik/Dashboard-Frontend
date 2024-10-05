@@ -10,6 +10,7 @@ import Sales from "./pages/Sales";
 import Inventory from "./pages/Inventory";
 import Revenue from "./pages/Revenue";
 import CustomerSupport from "./pages/CustomerSupport";
+import Ticket from "./pages/Ticket";
 
 function App() {
 	const router = createBrowserRouter([
@@ -34,13 +35,18 @@ function App() {
 					path: "/revenue",
 					element: <Revenue />,
 				},
-				// {
-				// 	path: "/users",
-				// 	element: <Users />,
-				// },
 				{
 					path: "/customerSupport",
-					element: <CustomerSupport />,
+					children: [
+						{
+							path: "",
+							element: <CustomerSupport />,
+						},
+						{
+							path: "ticket",
+							element: <Ticket />,
+						},
+					],
 				},
 			],
 		},

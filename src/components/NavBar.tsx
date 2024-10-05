@@ -134,7 +134,7 @@ const NavBar = ({
 
 					{/* Help */}
 					<div className="w-full flex flex-col gap-3">
-						<Link
+						{/* <Link
 							className="flex justify-center items-center gap-1 text-decoration-none text-black"
 							style={{ cursor: "pointer" }}
 							to="/help"
@@ -152,7 +152,7 @@ const NavBar = ({
 								<FcSettings className="text-lg" />
 								Settings
 							</Link>
-						)}
+						)} */}
 
 						<IoMdCloseCircleOutline
 							className={"mt-1 w-full sm:hidden " + (menu ? "hidden" : "block")}

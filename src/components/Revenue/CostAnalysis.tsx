@@ -4,16 +4,29 @@ import SearchProduct from "./SearchProduct";
 import { ProductData } from "../../model/ProductType";
 import { handelProductSearch } from "../../api/revenueController";
 import Loading from "../Loading";
+import { FaChevronUp } from "react-icons/fa";
 
 const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 	const [productData, setProductData] = useState<ProductData[] | null>(null);
 	const [loading, setLoading] = useState(true);
-	const [searchValue, setSearchValue] = useState("1");
+	const [searchValue, setSearchValue] = useState("");
 	const [searchParams, setSearchParams] = useState({
 		id: true,
 		name: false,
 	});
 	const [clearSearch, setClearSearch] = useState(false);
+	const [isModelOpen, setIsModelOpen] = useState(() => {
+		const savedModelState = localStorage.getItem("isModelOpen_CostAnalysis");
+		return savedModelState ? JSON.parse(savedModelState) : false;
+	});
+
+	useEffect(() => {
+		localStorage.setItem(
+			"isModelOpen_CostAnalysis",
+			JSON.stringify(isModelOpen)
+		);
+	}, [isModelOpen]);
+
 	useEffect(() => {
 		handelProductSearch({
 			searchParams,
@@ -33,25 +46,39 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 		);
 	} else
 		return (
-			<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col min-h-[550px]">
-				<div className="flex w-full justify-start items-center gap-10">
-					<h1 className="text-2xl font-bold">Cost Analysis</h1>
-					<div className="w-1/4">
-						<SearchProduct
-							bgColor="bg-white"
-							searchValue={searchValue}
-							clearSearch={clearSearch}
-							setSearchValue={setSearchValue}
-							searchParams={searchParams}
-							setSearchParams={setSearchParams}
-							setProductData={setProductData}
-							setLoading={setLoading}
-							setError={setError}
-							setClearSearch={setClearSearch}
-						/>
+			<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col">
+				<div className="flex w-full justify-between items-center">
+					<div className="flex gap-10 items-center">
+						<h1 className="text-2xl font-bold">Cost Analysis</h1>
+						<div className="w-[300px]">
+							<SearchProduct
+								bgColor="bg-white"
+								searchValue={searchValue}
+								clearSearch={clearSearch}
+								setSearchValue={setSearchValue}
+								searchParams={searchParams}
+								setSearchParams={setSearchParams}
+								setProductData={setProductData}
+								setLoading={setLoading}
+								setError={setError}
+								setClearSearch={setClearSearch}
+							/>
+						</div>
 					</div>
+					<FaChevronUp
+						className={`select-none cursor-pointer transition-transform duration-300 text-2xl ${
+							isModelOpen ? "rotate-180" : ""
+						}`}
+						onClick={() => {
+							setIsModelOpen(!isModelOpen);
+						}}
+					/>
 				</div>
-				<div className="flex justify-evenly px-10">
+				<div
+					className={`flex justify-evenly px-10 transition-all duration-500 ease-in-out ${
+						isModelOpen ? "max-h-0 overflow-hidden" : "max-h-[200vh]"
+					}`}
+				>
 					<div className=" w-[45%] px-4 flex flex-col justify-center items-center">
 						<CostPieChart data={productData?.[0]} />
 						<div className="font-semibold text-xl">Cost Breakdown Chart</div>

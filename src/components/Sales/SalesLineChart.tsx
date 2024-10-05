@@ -118,7 +118,11 @@ const SalesLineChart: React.FC<SalesLineChartProps> = ({ data }) => {
 		};
 	}, [data]);
 
-	return <canvas ref={chartRef} />;
+	return (
+		<div className="w-full px-10 pt-5">
+			<canvas ref={chartRef} />
+		</div>
+	);
 };
 
 export default SalesLineChart;

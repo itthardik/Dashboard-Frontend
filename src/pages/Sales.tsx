@@ -31,7 +31,7 @@ const Sales = () => {
 	}, [updateFilterKey, mqttClient]);
 
 	if (error) {
-		return <ErrorPage error={error} />;
+		return <ErrorPage error={error} setError={setError} />;
 	}
 	return (
 		<div className="w-full h-full flex flex-col gap-2">
@@ -46,7 +46,7 @@ const Sales = () => {
 				setUpdateFilterKey={setUpdateFilterKey}
 			/>
 			<OverallSalesByDate setError={setError} />
-			<RealtimeSales />
+			<RealtimeSales setError={setError} />
 			<TopProductsBasedOnSales setError={setError} />
 			<TopCategoryBasedOnSales setError={setError} />
 		</div>

@@ -33,10 +33,11 @@ const Inventory = () => {
 
 	useEffect(() => {
 		if (mqttClient) {
+			subscribeToTopic("inventory/notificationAlert", mqttClient);
 			if (updateFilterKey === "realtime") {
-				subscribeToTopic("inventory/#", mqttClient);
+				subscribeToTopic("inventory/orderItems", mqttClient);
 				toast.success("Updates are Realtime");
-			} else unsubscribeToTopic("inventory/#", mqttClient);
+			} else unsubscribeToTopic("inventory/orderItems", mqttClient);
 		}
 	}, [updateFilterKey, mqttClient]);
 
@@ -60,7 +61,7 @@ const Inventory = () => {
 	}, [mqttInventoryMessages, setMqttInventoryMessages]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (error) {
-		return <ErrorPage error={error} />;
+		return <ErrorPage error={error} setError={setError} />;
 	}
 
 	return (

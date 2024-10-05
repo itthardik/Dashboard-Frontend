@@ -204,3 +204,56 @@ export const fetchTopCategorieBySalesByPagination = async ({
 		setLoading(true);
 	}
 };
+
+export const fetchLast10minSales = async ({
+	setLoading,
+	setError,
+	setLast10minData,
+}: {
+	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+	setError: React.Dispatch<React.SetStateAction<any>>;
+	setLast10minData: React.Dispatch<React.SetStateAction<any[]>>;
+}) => {
+	try {
+		setLoading(false);
+		const response = await fetch(
+			`https://localhost:7012/api/sales/getLast10minSales`,
+			{
+				method: "GET",
+				credentials: "include",
+			}
+		);
+		if ([401, 403].includes(response.status)) {
+			setError(response.status.toString());
+			setLoading(true);
+			return;
+		}
+		if (response.status === 404) {
+			const result = await response.json();
+			throw new Error(result);
+		}
+		if (response.status === 400) {
+			var jsonError = await response.json();
+			if (jsonError == null) toast.error(response.toString());
+			for (var err in jsonError.errors) {
+				toast.error(jsonError.errors[err][0]);
+			}
+			setLoading(true);
+			return;
+		}
+		if (response.status === 401)
+			if (!response.ok) {
+				throw new Error((await response.json()).title);
+			}
+		const result = await response.json();
+		if (result.error) {
+			toast.error(result.error);
+		} else {
+			setLast10minData(result.data);
+		}
+		setLoading(true);
+	} catch (error: any) {
+		setError(error.message);
+		setLoading(true);
+	}
+};
