@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IoMdHelpCircleOutline, IoMdCloseCircleOutline } from "react-icons/io";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 import {
 	FcBusinessman,
@@ -7,7 +7,6 @@ import {
 	FcCurrencyExchange,
 	FcCustomerSupport,
 	FcManager,
-	FcSettings,
 	FcShipped,
 } from "react-icons/fc";
 
@@ -25,7 +24,7 @@ const NavBar = ({
 	setError,
 }: {
 	setLoading: React.Dispatch<boolean>;
-	setError: React.Dispatch<any>;
+	setError: React.Dispatch<string | undefined>;
 }) => {
 	const [menu, setMenu] = useState(false);
 	const { userData, setUserData } = useConfig();

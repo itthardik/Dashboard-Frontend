@@ -1,6 +1,7 @@
 import { toast } from "react-toastify";
 import { ProductData } from "../model/ProductType";
 import React from "react";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "https://localhost:7012";
 
 export const handelProductSearch = async ({
 	searchParams,
@@ -23,7 +24,7 @@ export const handelProductSearch = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/revenue/productCost?${
+			`${BASE_URL}/api/revenue/productCost?${
 				searchParams.id ? "id=" : "name="
 			}${searchValue.trim()}`,
 			{
@@ -84,7 +85,7 @@ export const fetchSearchValuesByPagination = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/revenue/searchValues?pageNumber=${currPage}&pageSize=10`,
+			`${BASE_URL}/api/revenue/searchValues?pageNumber=${currPage}&pageSize=10`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -140,8 +141,7 @@ export const fetchRevenueDataByFilterKey = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/revenue/revenueStats?days=
-			${filterKey.trim()}`,
+			`${BASE_URL}/api/revenue/revenueStats?days=${filterKey.trim()}`,
 			{
 				method: "GET",
 				credentials: "include",

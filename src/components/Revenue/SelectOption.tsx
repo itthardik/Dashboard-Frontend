@@ -16,7 +16,7 @@ const SelectOption = ({
 			<select
 				id="dateRange"
 				className={
-					"block appearance-none w-full bg-whit px-4 py-2 pr-8 rounded shadow-md leading-tight focus:outline-none focus:shadow-outline font-medium " +
+					"block cursor-pointer appearance-none w-full bg-whit px-4 py-2 pr-8 rounded shadow-md leading-tight focus:outline-none focus:shadow-outline font-medium " +
 					bgColor
 				}
 				value={filterKey}

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { FaFilter } from "react-icons/fa";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GoSearch } from "react-icons/go";
-import { MdOutlineCancel } from "react-icons/md";
 import {
 	fetchTicketById,
 	fetchTicketsBySearchValue,
@@ -70,6 +69,7 @@ const SearchTickets = ({
 	return (
 		<div className="flex flex-col items-center relative w-full">
 			{/* Search Form */}
+			{searchValue}
 			<div className="w-full p-3 flex justify-evenly items-center rounded-2xl shadow-md bg-white">
 				<GiHamburgerMenu
 					className="text-xl cursor-pointer"
@@ -88,16 +88,17 @@ const SearchTickets = ({
 						type="text"
 						placeholder="Search here"
 						className={"text-md ps-2 w-full outline-none "}
+						value={searchValue}
 						onChange={(e) => {
 							setSearchValue(e.target.value);
 						}}
-						value={searchValue}
 						required
 					/>
 				</form>
 				<GoSearch
 					className="text-xl cursor-pointer"
-					onClick={() => {
+					onClick={(e) => {
+						e.preventDefault();
 						if (searchValue !== "") handleSearchSubmit();
 					}}
 				/>

@@ -10,7 +10,7 @@ import { refreshToken } from "../api/authContoller";
 
 export const Layout = () => {
 	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<any>();
+	const [error, setError] = useState<string | undefined>();
 
 	const {
 		setUserData,
@@ -72,6 +72,7 @@ export const Layout = () => {
 				if (topic === "inventory/orderItems") {
 					setMqttInventoryMessages(JSON.parse(messageStr));
 				} else if (topic === "inventory/notificationAlert") {
+					console.log(JSON.parse(messageStr));
 					setMqttInventoryNotification(JSON.parse(messageStr));
 				} else if (topic === "sales/salesByCategory") {
 					setMqttSalesByCategory(JSON.parse(messageStr));
@@ -82,7 +83,7 @@ export const Layout = () => {
 					console.log(JSON.parse(messageStr));
 				}
 			});
-			client.on("error", (e: any) => {
+			client.on("error", (e: Error) => {
 				client.end();
 				setMqttClient(null);
 				throw new Error(e.message);
@@ -91,8 +92,12 @@ export const Layout = () => {
 			return () => {
 				client.end();
 			};
-		} catch (ex: any) {
-			toast.error(ex.message);
+		} catch (ex) {
+			if (ex instanceof Error) {
+				toast.error(ex.message);
+			} else {
+				toast.error("An unknown error occurred");
+			}
 		}
 	}, [userData, setUserData]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { ProductData } from "../model/ProductType";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "https://localhost:7012";
 
 export const fetchInventoryData = async ({
 	sortFilterKey,
@@ -21,7 +22,7 @@ export const fetchInventoryData = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/inventory/getInventory?pageNumber=${currPage}&pageSize=${pageSize}&filterKey=${sortFilterKey}`,
+			`${BASE_URL}/api/inventory/getInventory?pageNumber=${currPage}&pageSize=${pageSize}&filterKey=${sortFilterKey}`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -87,7 +88,7 @@ export const addInventory = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/inventory/addInventory?productId=${productId}&stockRequire=${stockRequire}`,
+			`${BASE_URL}/api/inventory/addInventory?productId=${productId}&stockRequire=${stockRequire}`,
 			{
 				method: "PATCH",
 				credentials: "include",
@@ -151,7 +152,7 @@ export const fetchInventoryNotificationData = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/alert/getAlerts?pageNumber=${currPage}&pageSize=5`,
+			`${BASE_URL}/api/alert/getAlerts?pageNumber=${currPage}&pageSize=5`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -171,8 +172,8 @@ export const fetchInventoryNotificationData = async ({
 		if (!response.ok) {
 			throw new Error(result);
 		}
-		setMaxPages(result.maxPages);
-		setInventoryNotifications(result.data);
+		setMaxPages(result.MaxPages);
+		setInventoryNotifications(result.Data);
 		setLoading(true);
 	} catch (error: any) {
 		setError(error.message);

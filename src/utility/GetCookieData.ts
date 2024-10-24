@@ -1,8 +1,6 @@
-type CookieData = {
-	[key: string]: string;
-};
+import { CookieData } from "../model/Types";
 
-export const GetCookieData = (): CookieData | null => {
+export const GetCookieData = (): CookieData => {
 	const cookieString = document.cookie;
 	if (cookieString === "") {
 		return null;

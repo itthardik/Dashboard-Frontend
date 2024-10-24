@@ -34,7 +34,7 @@ const RealtimeSales = ({ setError }: { setError: React.Dispatch<any> }) => {
 			setError,
 			setLast10minData,
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		setLast10minDataPoint(
 			last10minData.map((d) => {

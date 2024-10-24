@@ -2,29 +2,64 @@ import React from "react";
 import { GrLinkNext, GrLinkPrevious } from "react-icons/gr";
 import { Link } from "react-router-dom";
 import { PriorityLevel, TicketStatus } from "../../model/AllEnums";
+import { FaSortDown, FaSortUp } from "react-icons/fa";
 
 const TicketTable = ({
 	ticketsData,
+	isAsc,
+	updateFilterKey,
+	setIsAsc,
 	currPage,
 	isNextPage,
 	setCurrPage,
 }: {
 	ticketsData: any[];
+	isAsc: boolean;
+	updateFilterKey: string;
+	setIsAsc: React.Dispatch<React.SetStateAction<boolean>>;
 	currPage: number;
 	isNextPage: boolean;
 	setCurrPage: React.Dispatch<React.SetStateAction<number>>;
 }) => {
 	return (
-		<div className="w-full mt-10">
+		<div className="w-full mt-16">
 			<div className="">
 				<table className="w-full">
 					<thead className="bg-ternary text-white">
 						<tr className="text-lg">
 							<th className="py-[6px]">Ticket ID</th>
 							<th className="py-[6px]">Title</th>
-							<th className="py-[6px]">Status</th>
+							<th
+								className="py-[6px] flex justify-center items-center gap-2 cursor-pointer select-none"
+								onClick={() => setIsAsc((prev) => !prev)}
+							>
+								Status{" "}
+								{updateFilterKey === "status" && (
+									<div>
+										{isAsc ? (
+											<FaSortUp className="text-xl" />
+										) : (
+											<FaSortDown className="text-xl" />
+										)}
+									</div>
+								)}
+							</th>
 							<th className="py-[6px]">Severity</th>
-							<th className="py-[6px]">Creation Date</th>
+							<th
+								className="py-[6px] flex justify-center items-center gap-2 cursor-pointer select-none"
+								onClick={() => setIsAsc((prev) => !prev)}
+							>
+								Creation Date{" "}
+								{updateFilterKey === "created_at" && (
+									<div>
+										{isAsc ? (
+											<FaSortUp className="text-xl" />
+										) : (
+											<FaSortDown className="text-xl" />
+										)}
+									</div>
+								)}
+							</th>
 							<th className="py-[6px]">Link</th>
 						</tr>
 					</thead>

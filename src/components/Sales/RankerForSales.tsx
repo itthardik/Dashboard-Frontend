@@ -24,7 +24,7 @@ const RankerForSales = ({
 						</tr>
 					</thead>
 					<tbody className="text-md">
-						{data.map((d: any, index) => (
+						{data?.map((d: any, index) => (
 							<tr
 								key={index}
 								className={index % 2 ? "bg-white" : "bg-secondary"}

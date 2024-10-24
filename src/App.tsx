@@ -55,6 +55,7 @@ function App() {
 			element: <Login />,
 		},
 	]);
+
 	return (
 		<ConfigProvider>
 			<ToastContainer

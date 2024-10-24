@@ -48,6 +48,17 @@ const AlertNotificationButton = ({
 	};
 
 	useEffect(() => {
+		fetchInventoryNotificationData({
+			currPage,
+			setLoading,
+			setError,
+			setMaxPages,
+			setInventoryNotifications,
+		});
+		console.log(inventoryNotifications);
+	}, [currPage]);
+
+	useEffect(() => {
 		if (mqttInventoryNotification == null) return;
 		if (inventoryNotifications == null) {
 			setInventoryNotifications([mqttInventoryNotification]);
@@ -98,15 +109,6 @@ const AlertNotificationButton = ({
 		};
 	}, [alertModel]); // eslint-disable-line react-hooks/exhaustive-deps
 
-	useEffect(() => {
-		fetchInventoryNotificationData({
-			currPage,
-			setLoading,
-			setError,
-			setMaxPages,
-			setInventoryNotifications,
-		});
-	}, [currPage]);
 	const handleSubmit = (id: number, restockAmt: number) => {
 		setAlertModel(false);
 		setAddInventoryId(id);

@@ -75,12 +75,13 @@ const SalesByCategory = ({
 				<div className="flex justify-between items-center w-full">
 					<div className="flex items-center gap-10">
 						<h1 className="text-2xl font-bold">Sales Data By Category</h1>
-						<div className="flex justify-center items-center gap-3 w-1/3">
+						<div className="flex justify-center items-center gap-3">
 							<SelectOption
 								filterKey={filterKey}
 								setFilterKey={setFilterKey}
 								optionList={[
 									{ key: "Today", value: "today" },
+									{ key: "Yesterday", value: "yesterday" },
 									{ key: "Last 3 Days", value: "last3days" },
 									{ key: "Last Week", value: "lastweek" },
 									{ key: "Last Month", value: "lastmonth" },
@@ -89,15 +90,17 @@ const SalesByCategory = ({
 									{ key: "Last Year", value: "lastyear" },
 								]}
 							/>
-							<SelectOption
-								key="Updates"
-								filterKey={updateFilterKey}
-								setFilterKey={setUpdateFilterKey}
-								optionList={[
-									{ key: "Updates: Static", value: "static" },
-									{ key: "Updates: Realtime", value: "realtime" },
-								]}
-							/>
+							<div className="min-w-48">
+								<SelectOption
+									key="Updates"
+									filterKey={updateFilterKey}
+									setFilterKey={setUpdateFilterKey}
+									optionList={[
+										{ key: "Updates: Static", value: "static" },
+										{ key: "Updates: Realtime", value: "realtime" },
+									]}
+								/>
+							</div>
 						</div>
 					</div>
 					<FaChevronUp

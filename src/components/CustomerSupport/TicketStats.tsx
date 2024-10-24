@@ -29,7 +29,7 @@ const TicketStats = ({ setError }: { setError: React.Dispatch<any> }) => {
 			setLoading,
 			setOverallTicketsData,
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (!loading) {
 		return (

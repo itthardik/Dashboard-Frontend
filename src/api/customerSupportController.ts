@@ -1,10 +1,12 @@
 import { toast } from "react-toastify";
+const BASE_URL = process.env.REACT_APP_BASE_URL || "https://localhost:7012";
 
 export const fetchAllTicketsByPagination = async ({
 	setLoading,
 	setError,
 	setTicketsData,
 	setIsNextPage,
+	isAsc,
 	currPage,
 	updateFilterKey,
 }: {
@@ -12,15 +14,16 @@ export const fetchAllTicketsByPagination = async ({
 	setError: React.Dispatch<React.SetStateAction<any>>;
 	setTicketsData: React.Dispatch<React.SetStateAction<any[]>>;
 	setIsNextPage: React.Dispatch<React.SetStateAction<boolean>>;
+	isAsc: boolean;
 	currPage: number;
 	updateFilterKey: string;
 }) => {
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/customerSupport/getAllTickets?pageNumber=${currPage}&pageSize=10&orderBy=${
-				updateFilterKey.split(",")[0]
-			}&orderType=${updateFilterKey.split(",")[1]}`,
+			`${BASE_URL}/api/customerSupport/getAllTickets?pageNumber=${currPage}&pageSize=10&orderBy=${updateFilterKey}&orderType=${
+				isAsc ? "asc" : "desc"
+			}`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -66,7 +69,7 @@ export const fetchTicketsBySearchValue = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/customerSupport/getTicketsByQuery?query=${query}&orderBy=${
+			`${BASE_URL}/api/customerSupport/getTicketsByQuery?query=${query}&orderBy=${
 				updateFilterKey.split(",")[0]
 			}&orderType=${updateFilterKey.split(",")[1]}`,
 			{
@@ -117,7 +120,7 @@ export const fetchTicketById = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/customerSupport/getTicket?id=${id}`,
+			`${BASE_URL}/api/customerSupport/getTicket?id=${id}`,
 			{
 				method: "GET",
 				credentials: "include",
@@ -154,6 +157,7 @@ export const fetchTicketById = async ({
 		setLoading(true);
 	}
 };
+
 export const fetchOverallTicketsData = async ({
 	setError,
 	setLoading,
@@ -166,7 +170,7 @@ export const fetchOverallTicketsData = async ({
 	try {
 		setLoading(false);
 		const response = await fetch(
-			`https://localhost:7012/api/customerSupport/getOverallStats`,
+			`${BASE_URL}/api/customerSupport/getOverallStats`,
 			{
 				method: "GET",
 				credentials: "include",

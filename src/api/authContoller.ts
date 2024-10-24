@@ -1,6 +1,9 @@
 import { NavigateFunction } from "react-router-dom";
 import { toast } from "react-toastify";
 import { GetCookieData } from "../utility/GetCookieData";
+import { CookieData } from "../model/Types";
+
+const BASE_URL = process.env.REACT_APP_BASE_URL || "https://localhost:7012";
 
 export const handleLoginSubmit = async ({
 	formData,
@@ -21,13 +24,13 @@ export const handleLoginSubmit = async ({
 			password: string;
 		}>
 	>;
-	setUserData: React.Dispatch<any>;
+	setUserData: React.Dispatch<React.SetStateAction<CookieData>>;
 	setLoading: React.Dispatch<boolean>;
 	setError: React.Dispatch<any>;
 }) => {
 	try {
 		setLoading(false);
-		const response = await fetch("https://localhost:7012/auth/login", {
+		const response = await fetch(`${BASE_URL}/auth/login`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -53,8 +56,13 @@ export const handleLoginSubmit = async ({
 			navigator("/");
 		}
 		setLoading(true);
-	} catch (error: any) {
-		toast.error(error);
+	} catch (error: unknown) {
+		if (error instanceof Error) {
+			toast.error(error.message);
+			setError(error.message);
+		} else {
+			toast.error("An unknown error occurred");
+		}
 		setLoading(true);
 	}
 };
@@ -64,14 +72,14 @@ export const handleLogout = async ({
 	setLoading,
 	setError,
 }: {
-	setUserData: React.Dispatch<any>;
+	setUserData: React.Dispatch<React.SetStateAction<CookieData>>;
 	navigate: NavigateFunction;
 	setLoading: React.Dispatch<boolean>;
 	setError: React.Dispatch<any>;
 }) => {
 	try {
 		setLoading(false);
-		const response = await fetch("https://localhost:7012/auth/logout", {
+		const response = await fetch(`${BASE_URL}/auth/logout`, {
 			method: "POST",
 			credentials: "include",
 		});
@@ -116,13 +124,13 @@ export async function refreshToken({
 	setLoading,
 	setError,
 }: {
-	setUserData: React.Dispatch<any>;
+	setUserData: React.Dispatch<React.SetStateAction<CookieData>>;
 	setLoading: React.Dispatch<boolean>;
 	setError: React.Dispatch<any>;
 }) {
 	try {
 		setLoading(false);
-		const response = await fetch("https://localhost:7012/auth/refresh", {
+		const response = await fetch(`${BASE_URL}/auth/refresh`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

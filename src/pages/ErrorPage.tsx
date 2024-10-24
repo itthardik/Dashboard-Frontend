@@ -1,15 +1,20 @@
 import { IoArrowBackCircle } from "react-icons/io5";
 import { useRouteError } from "react-router";
 import { Link } from "react-router-dom";
+import { useConfig } from "../api/ContextApi";
 
 export default function ErrorPage({
 	error,
 	setError,
 }: {
-	error?: any;
-	setError?: React.Dispatch<any>;
+	error?: string;
+	setError?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) {
-	const errorByRouter: any = useRouteError();
+	const errorByRouter = useRouteError() as {
+		statusText?: string;
+		message?: string;
+	};
+	const { userData } = useConfig();
 	return (
 		<div
 			className={
@@ -25,7 +30,7 @@ export default function ErrorPage({
 
 			<img
 				src={
-					["401", "403"].includes(error)
+					["401", "403"].includes(error || "")
 						? "/gif/error401.gif"
 						: "/gif/error.gif"
 				}
@@ -34,10 +39,10 @@ export default function ErrorPage({
 			/>
 			<div className="flex flex-col text-center">
 				<h1 className="font-light text-primary text-4xl">
-					{["401", "403"].includes(error) ? "Error " + error : "OOPS!"}
+					{["401", "403"].includes(error || "") ? "Error " + error : "OOPS!"}
 				</h1>
 
-				<p className="font-light">
+				<div className="font-light flex flex-col justify-center item-center">
 					<i>
 						{errorByRouter
 							? errorByRouter.statusText || errorByRouter.message
@@ -47,7 +52,13 @@ export default function ErrorPage({
 							? "Forbidden : Access to this resource is denied!"
 							: error}
 					</i>
-				</p>
+					<p className="text-red-500">
+						{/* {userData && "( Note: No Token Found! Please login again. )"} */}
+						{Date.now() >
+							new Date(userData!["TokenExpirationTime"]).getTime() &&
+							"( Note: Session Expired! Please login again. )"}
+					</p>
+				</div>
 				<Link
 					to={"/"}
 					reloadDocument

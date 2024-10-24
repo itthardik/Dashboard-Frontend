@@ -26,7 +26,7 @@ const calculateTimeDifference = (startTime: string, endTime: string) => {
 };
 
 const Ticket = () => {
-	const [searchParam, setSearchParam] = useSearchParams();
+	const [searchParam] = useSearchParams();
 	const navigator = useNavigate();
 	const [ticketsData, setTicketsData] = useState<any[]>([]);
 	const [error, setError] = useState<any>();
@@ -42,7 +42,7 @@ const Ticket = () => {
 			setLoading,
 			setTicketsData,
 		});
-	}, []);
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		if (!loading) return;
@@ -60,7 +60,7 @@ const Ticket = () => {
 				ticketsData[0]?.stats?.first_responded_at
 			)
 		);
-	}, [loading]);
+	}, [loading]); // eslint-disable-line react-hooks/exhaustive-deps
 	if (!loading) {
 		return (
 			<div className="flex justify-center items-center h-lvh w-full">

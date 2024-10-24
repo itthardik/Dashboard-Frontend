@@ -50,6 +50,7 @@ const RevenueAndProfit = ({ setError }: { setError: React.Dispatch<any> }) => {
 								setFilterKey={setFilterKey}
 								optionList={[
 									{ key: "Today", value: "today" },
+									{ key: "Yesterday", value: "yesterday" },
 									{ key: "Last 3 Days", value: "last3days" },
 									{ key: "Last Week", value: "lastweek" },
 									{ key: "Last Month", value: "lastmonth" },

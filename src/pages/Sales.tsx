@@ -32,25 +32,29 @@ const Sales = () => {
 
 	if (error) {
 		return <ErrorPage error={error} setError={setError} />;
-	}
-	return (
-		<div className="w-full h-full flex flex-col gap-2">
-			<div className="my-3 flex justify-center items-center gap-2">
-				<img src="./../images/logo.png" alt="Login Gif" className="w-[60px]" />
-				<h1 className="text-3xl font-bold">Sales Performance Monitoring</h1>
+	} else
+		return (
+			<div className="w-full h-full flex flex-col gap-2">
+				<div className="my-3 flex justify-center items-center gap-2">
+					<img
+						src="./../images/logo.png"
+						alt="Login Gif"
+						className="w-[60px]"
+					/>
+					<h1 className="text-3xl font-bold">Sales Performance Monitoring</h1>
+				</div>
+				<SalesByCategory
+					updateFilterKey={updateFilterKey}
+					setError={setError}
+					setSearchParams={setSearchParams}
+					setUpdateFilterKey={setUpdateFilterKey}
+				/>
+				<OverallSalesByDate setError={setError} />
+				<RealtimeSales setError={setError} />
+				<TopProductsBasedOnSales setError={setError} />
+				<TopCategoryBasedOnSales setError={setError} />
 			</div>
-			<SalesByCategory
-				updateFilterKey={updateFilterKey}
-				setError={setError}
-				setSearchParams={setSearchParams}
-				setUpdateFilterKey={setUpdateFilterKey}
-			/>
-			<OverallSalesByDate setError={setError} />
-			<RealtimeSales setError={setError} />
-			<TopProductsBasedOnSales setError={setError} />
-			<TopCategoryBasedOnSales setError={setError} />
-		</div>
-	);
+		);
 };
 
 export default Sales;

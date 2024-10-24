@@ -13,11 +13,12 @@ const TicketViewer = ({ setError }: { setError: React.Dispatch<any> }) => {
 		parseInt(searchParams.get("page") ?? "1")
 	);
 	const [isClear, setIsClear] = useState(false);
+	const [isAsc, setIsAsc] = React.useState<boolean>(true);
 	const [ticketsData, setTicketsData] = useState<any[]>([]);
 	const [isNextPage, setIsNextPage] = useState<boolean>(false);
 	const [loading, setLoading] = useState(true);
 	const [updateFilterKey, setUpdateFilterKey] = useState(
-		searchParams.get("sortBy") ?? "created_at,desc"
+		searchParams.get("sortBy") ?? "created_at"
 	);
 
 	const [isModelOpen, setIsModelOpen] = useState(() => {
@@ -38,11 +39,12 @@ const TicketViewer = ({ setError }: { setError: React.Dispatch<any> }) => {
 			setError,
 			setTicketsData,
 			setIsNextPage,
+			isAsc,
 			currPage,
 			updateFilterKey,
 		});
 		setSearchParams({ page: currPage.toString(), sortBy: updateFilterKey });
-	}, [currPage, updateFilterKey, isClear]);
+	}, [currPage, updateFilterKey, isClear, isAsc]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	if (!loading) {
 		return (
@@ -53,43 +55,44 @@ const TicketViewer = ({ setError }: { setError: React.Dispatch<any> }) => {
 	}
 	return (
 		<div className="mx-5 my-2 p-5 bg-secondary rounded-md shadow-md flex flex-col">
-			<div className="flex justify-left items-center gap-10">
-				<h1 className="text-2xl py-2 font-bold text-left">Tickets</h1>
-				<div className="w-2/5">
-					<SearchTickets
-						updateFilterKey={updateFilterKey}
-						setError={setError}
-						setLoading={setLoading}
-						setTicketsData={setTicketsData}
-					/>
+			<div className="flex justify-between items-center">
+				<div className="flex items-center gap-5">
+					<h1 className="text-2xl py-2 font-bold text-left">Tickets</h1>
+					<div className="min-w-[450px]">
+						<SearchTickets
+							updateFilterKey={updateFilterKey}
+							setError={setError}
+							setLoading={setLoading}
+							setTicketsData={setTicketsData}
+						/>
+					</div>
+					<div className="min-w-48">
+						<SelectOption
+							key="SortBy"
+							bgColor="bg-white"
+							filterKey={updateFilterKey}
+							setFilterKey={setUpdateFilterKey}
+							optionList={[
+								{ key: "Sort By: Created At", value: "created_at" },
+								{ key: "Sort By: Status", value: "status" },
+							]}
+						/>
+					</div>
+					<button
+						className="py-1 border-2 font-semibold border-primary text-primary rounded-lg hover:text-white hover:bg-primary transition-colors min-w-[150px]"
+						onClick={() => {
+							setSearchParams({ page: "1", sortBy: "created_at" });
+							setCurrPage(1);
+							setIsAsc(true);
+							setUpdateFilterKey("created_at");
+							setIsClear((prev) => !prev);
+						}}
+					>
+						Clear All Filters
+					</button>
 				</div>
-				<div className="min-w-48">
-					<SelectOption
-						key="SortBy"
-						bgColor="bg-white"
-						filterKey={updateFilterKey}
-						setFilterKey={setUpdateFilterKey}
-						optionList={[
-							{ key: "Sort By: Created At (Asc)", value: "created_at,asc" },
-							{ key: "Sort By: Created At (Desc)", value: "created_at,desc" },
-							{ key: "Sort By: Status (Asc)", value: "status,asc" },
-							{ key: "Sort By: Status (Desc)", value: "status,desc" },
-						]}
-					/>
-				</div>
-				<button
-					className="py-1 px-2 border-2 font-semibold border-primary text-primary rounded-lg hover:text-white hover:bg-primary transition-colors"
-					onClick={() => {
-						setSearchParams({ page: "1", sortBy: "created_at,desc" });
-						setCurrPage(1);
-						setUpdateFilterKey("created_at,desc");
-						setIsClear((prev) => !prev);
-					}}
-				>
-					Clear All Filters
-				</button>
 				<FaChevronUp
-					className={`select-none cursor-pointer transition-transform duration-300 text-2xl ${
+					className={`text-2xl select-none cursor-pointer transition-transform duration-300 ${
 						isModelOpen ? "rotate-180" : ""
 					}`}
 					onClick={() => {
@@ -103,6 +106,9 @@ const TicketViewer = ({ setError }: { setError: React.Dispatch<any> }) => {
 				}`}
 			>
 				<TicketTable
+					isAsc={isAsc}
+					updateFilterKey={updateFilterKey}
+					setIsAsc={setIsAsc}
 					ticketsData={ticketsData}
 					currPage={currPage}
 					isNextPage={isNextPage}
