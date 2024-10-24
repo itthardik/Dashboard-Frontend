@@ -1,70 +1,149 @@
-# Getting Started with Create React App
+# E-Commerce Sales Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+The **E-Commerce Sales Dashboard** is a comprehensive solution designed to provide real-time insights into sales performance, inventory management, revenue analysis, and customer support. The dashboard helps businesses make data-driven decisions, optimize operations, and streamline customer support processes.
 
-In the project directory, you can run:
+This application features:
+- **Sales Performance Monitoring**: Real-time sales visualization with comparison across time periods.
+- **Inventory Management**: Real-time stock monitoring, shortage prediction, and automated reorder processes.
+- **Revenue and Profit Analysis**: Detailed analysis of revenue, profit margins, and cost breakdowns.
+- **Customer Support Dashboard**: Manage customer support tickets with priority-based sorting, search, and filter functionalities.
+- **Role-Based Access Control**: Different levels of access based on user roles (Admin, Sales Manager, Inventory Manager, Revenue Manager, Customer Support Manager).
+- **Third-Party API Integrations**: Integration with external platforms for enhanced customer support and background job automation.
 
-### `npm start`
+---
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Table of Contents
+- [Features](#features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Database Schema](#database-schema)
+- [Third-Party Integrations](#third-party-integrations)
+- [Development Process](#development-process)
+- [License](#license)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **User Authentication and Access Control**
+   - Role-based access (Admin, Sales Manager, Inventory Manager, Revenue Manager, Customer Support Manager).
+   
+2. **Sales Performance Monitoring**
+   - Real-time sales data visualization with bar and line graphs.
+   - Sales comparison over different time periods (days, weeks, months).
+   - Top 5 products and categories based on sales (optional).
 
-### `npm run build`
+3. **Inventory Management**
+   - Monitor stock levels in real-time.
+   - Predict stock shortages and automate reorder processes.
+   - Highlight low-stock items.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+4. **Revenue and Profit Analysis**
+   - Visualize revenue and profit margins by category.
+   - Cost breakdown with pie charts.
+   - Forecast future sales based on past trends.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+5. **Customer Support Dashboard**
+   - Manage support tickets with search, filter, and priority-based sorting.
+   - Track response and resolution times.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+6. **Utility Features**
+   - Background job for midnight restocking, recalculating data and live data updates.
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Technology Stack
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- **Frontend**: React, Tailwind CSS, Chart.js
+- **Backend**: .NET Core (API Development), Hangfire (for background jobs)
+- **Database**: SQL Server
+- **Real-Time Communication**: MQTT, WebSocket, Mosquitto broker
+- **Authentication**: JSON Web Token (JWT), Session Token
+- **Third-Party Integrations**: Freshdesk API for customer support
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+---
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Installation
 
-## Learn More
+### Prerequisites
+Ensure you have the following installed on your system:
+- .NET Core SDK (v8.0)
+- Node.js
+- NPM
+- SQL Server
+- Mosquitto Broker
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Steps
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. Clone the repository
 
-### Code Splitting
+2. Install the required dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. Set up the SQL Server database
 
-### Analyzing the Bundle Size
+4. Start the Mosquitto broker
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+5. Set up your environment variables
 
-### Making a Progressive Web App
+6. Start the application
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## Usage
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Access Roles
 
-### Deployment
+- **Admin**: Full access to all features.
+- **Sales Manager**: Access to Sales Performance Monitoring.
+- **Inventory Manager**: Access to Inventory Management.
+- **Revenue Manager**: Access to Revenue and Profit Analysis.
+- **Customer Support Manager**: Access to the Customer Support Dashboard.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Sales Performance
+- View real-time sales data across categories.
+- Compare sales over different time periods.
+- Monitor top-performing products and categories.
 
-### `npm run build` fails to minify
+### Inventory Management
+- Track stock levels in real-time.
+- Receive notifications for stock shortages.
+- Automatically reorder items when thresholds are met.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Revenue and Profit Analysis
+- Analyze revenue, costs, and profits.
+- Forecast future sales trends based on historical data.
+
+### Customer Support Dashboard
+- Manage and monitor customer support tickets.
+- View ticket status, priorities, and resolution times.
+
+---
+
+## Database Schema
+
+- **Users**: Stores user information and roles.
+- **Orders**: Tracks order details including status and pricing.
+- **Products**: Contains product details, cost, and stock levels.
+- **Categories**: Product category details.
+- **Suppliers**: Information on product suppliers.
+- **Stock Alerts**: Tracks low-stock alerts.
+- **Customer Searches**: Logs customer search history for sales forecasting.
+
+---
+
+## Third-Party Integrations
+
+- **Freshdesk API**: For managing customer support tickets.
+- **Mosquitto Broker**: Real-time communication using MQTT.
+- **Hangfire**: For background job management and task scheduling.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
