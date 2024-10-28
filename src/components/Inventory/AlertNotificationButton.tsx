@@ -55,7 +55,6 @@ const AlertNotificationButton = ({
 			setMaxPages,
 			setInventoryNotifications,
 		});
-		console.log(inventoryNotifications);
 	}, [currPage]);
 
 	useEffect(() => {
@@ -111,9 +110,9 @@ const AlertNotificationButton = ({
 
 	const handleSubmit = (id: number, restockAmt: number) => {
 		setAlertModel(false);
+		setAddInventoryModel(true);
 		setAddInventoryId(id);
 		setAddInventoryRestock(restockAmt);
-		setAddInventoryModel(true);
 	};
 	return (
 		<div className="relative flex justify-center items-center">

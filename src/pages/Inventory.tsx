@@ -8,6 +8,7 @@ import { useConfig } from "../api/ContextApi";
 import { subscribeToTopic, unsubscribeToTopic } from "../api/mqttController";
 import { toast } from "react-toastify";
 import AlertNotificationButton from "../components/Inventory/AlertNotificationButton";
+import InventoryLegend from "../components/Inventory/InventoryLegend";
 
 const Inventory = () => {
 	const { mqttInventoryMessages, setMqttInventoryMessages } = useConfig();
@@ -75,6 +76,7 @@ const Inventory = () => {
 					/>
 					<h1 className="text-3xl font-bold">Inventory Management</h1>
 					<div className="flex gap-3 absolute right-10">
+						<InventoryLegend />
 						<AddInventoryButton
 							inventoryData={inventoryData}
 							addInventoryModel={addInventoryModel}

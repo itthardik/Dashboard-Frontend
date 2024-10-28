@@ -83,7 +83,7 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 						<CostPieChart data={productData?.[0]} />
 						<div className="font-semibold text-xl">Cost Breakdown Chart</div>
 					</div>
-					<div className="w-[55%] px-10 mt-10">
+					<div className="w-[55%] px-5 mt-10">
 						<div>
 							<div className="flex justify-between text-xl">
 								<p>
@@ -137,9 +137,22 @@ const CostAnalysis = ({ setError }: { setError: React.Dispatch<any> }) => {
 											</td>
 										</tr>
 										<tr className="border-b border-gray-200">
-											<td className="py-2 px-4">Average Daily Usage</td>
+											<td
+												className="py-2 px-4"
+												title="Average Daily Usage (90 Days)"
+											>
+												Average Daily Usage
+											</td>
 											<td className="py-2 px-4">
-												{productData?.[0]?.averageDailyUsage}
+												<code>
+													~{productData?.[0]?.averageDailyUsage.toPrecision(1)}{" "}
+												</code>
+												per day ({" "}
+												<>
+													{Math.floor(productData?.[0]?.averageDailyUsage! * 7)}
+													-{Math.ceil(productData?.[0]?.averageDailyUsage! * 7)}{" "}
+												</>
+												orders per week)
 											</td>
 										</tr>
 									</tbody>

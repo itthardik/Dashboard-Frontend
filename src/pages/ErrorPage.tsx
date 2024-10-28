@@ -54,8 +54,9 @@ export default function ErrorPage({
 					</i>
 					<p className="text-red-500">
 						{/* {userData && "( Note: No Token Found! Please login again. )"} */}
-						{Date.now() >
-							new Date(userData!["TokenExpirationTime"]).getTime() &&
+						{userData &&
+							Date.now() >
+								new Date(userData["TokenExpirationTime"]).getTime() &&
 							"( Note: Session Expired! Please login again. )"}
 					</p>
 				</div>

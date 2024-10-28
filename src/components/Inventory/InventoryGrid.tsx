@@ -180,12 +180,24 @@ const InventoryGrid = ({
 											<h1>{i.currentStock}</h1>
 										</div>
 										<div className="flex justify-between items-center w-full">
-											<h1>Average Daily Usage (90 Days):</h1>
-											<h1>{i.averageDailyUsage.toPrecision(2)}</h1>
-										</div>
-										<div className="flex justify-between items-center w-full">
 											<h1>Reorder Point:</h1>
 											<h1>{i.reorderPoint}</h1>
+										</div>
+										<div className="flex justify-between items-center w-full">
+											<h1 title="Average Daily Usage (90 Days)">
+												Average Daily Usage:
+											</h1>
+											<h1>
+												<code>~{i.averageDailyUsage.toPrecision(1)} </code>per
+												day
+											</h1>
+										</div>
+										<div className="flex justify-between items-center w-full">
+											<h1>&nbsp;</h1>
+											<h1>
+												({Math.floor(i.averageDailyUsage! * 7)}-
+												{Math.ceil(i.averageDailyUsage! * 7)} orders per week)
+											</h1>
 										</div>
 										<div className="flex justify-between items-center w-full">
 											<h1>Total Value of stock:</h1>
